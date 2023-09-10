@@ -2,8 +2,12 @@ streamlit
 pyyaml
 streamlit-lottie
 streamlit-authenticator
-langchain
-openai
-sentence-transformers
-pinecone-client
 requests
+pandas
+numpy
+gspread
+oauth2client
+re
+apify-client
+time
+random
