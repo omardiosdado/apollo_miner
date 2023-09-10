@@ -55,7 +55,7 @@ client = gspread.authorize(credentials)
 # Perform SQL query on the Google Sheet.
 # Uses st.cache_data to only rerun when the query changes or after 10 min.
 @st.cache_data(ttl=600)
-def load_data(url, sheet_name=shit_name):
+def load_data(url, sheet_name):
     sh = client.open_by_url(url)
     df = pd.DataFrame(sh.worksheet(sheet_name).get_all_records())
     return df
