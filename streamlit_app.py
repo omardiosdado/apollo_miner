@@ -31,7 +31,7 @@ st.markdown(hide_default_format, unsafe_allow_html=True)
 
 st.image("https://i.imgur.com/XQ0ePg2.png", use_column_width='auto')
 st.caption(':turtle: V1.01')
-
+NOMBRES_OK = pd.read_csv('./nombres_ok.csv', encoding='utf-8')
 col1, col2 =st.columns([1,3])
 col1.subheader('Procesador de descargas de Apollo')
 st.divider()
