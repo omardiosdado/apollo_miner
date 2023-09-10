@@ -11,6 +11,7 @@ import requests
 from streamlit_lottie import st_lottie_spinner
 import time
 import random
+from google.oauth2.service_account import Credentials
 
 
 
@@ -35,6 +36,32 @@ st.caption(':turtle: V1.01')
 col1, col2 =st.columns([1,3])
 col1.subheader('Procesador de descargas de Apollo')
 st.divider()
+
+
+
+
+scopes = [
+    "https://www.googleapis.com/auth/spreadsheets",
+]
+
+skey = st.secrets["gcp_service_account"]
+credentials = Credentials.from_service_account_info(
+    skey,
+    scopes=scopes,
+)
+client = gspread.authorize(credentials)
+
+
+# Perform SQL query on the Google Sheet.
+# Uses st.cache_data to only rerun when the query changes or after 10 min.
+@st.cache_data(ttl=600)
+def load_data(url, sheet_name="APOLLO_OUTPUT"):
+    sh = client.open_by_url(url)
+    df = pd.DataFrame(sh.worksheet(sheet_name).get_all_records())
+    return df
+st.dataframe(load_data('https://docs.google.com/spreadsheets/d/1g9_Jr0BXMqOcC5w3TKzfo7R1GJWFP-WlCQwIj2aCi2w'))
+
+
 
 APOLLO_CSV = col2.file_uploader('Carga el .CSV de Apollo:', type='csv')
 
