@@ -1,0 +1,9 @@
+streamlit
+pyyaml
+streamlit-lottie
+streamlit-authenticator
+langchain
+openai
+sentence-transformers
+pinecone-client
+requests
