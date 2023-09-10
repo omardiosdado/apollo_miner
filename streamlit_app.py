@@ -55,11 +55,11 @@ client = gspread.authorize(credentials)
 # Perform SQL query on the Google Sheet.
 # Uses st.cache_data to only rerun when the query changes or after 10 min.
 @st.cache_data(ttl=600)
-def load_data(url, sheet_name="APOLLO_OUTPUT"):
+def load_data(url, sheet_name=shit_name):
     sh = client.open_by_url(url)
     df = pd.DataFrame(sh.worksheet(sheet_name).get_all_records())
     return df
-st.dataframe(load_data('https://docs.google.com/spreadsheets/d/1g9_Jr0BXMqOcC5w3TKzfo7R1GJWFP-WlCQwIj2aCi2w'))
+#st.dataframe(load_data('https://docs.google.com/spreadsheets/d/1g9_Jr0BXMqOcC5w3TKzfo7R1GJWFP-WlCQwIj2aCi2w'))
 
 
 
@@ -114,10 +114,10 @@ if APOLLO_CSV is not None:
             progress_bar.progress(nbar)
             time.sleep(2)
             #GOOGLE SHEETS
-            scope = ['https://spreadsheets.google.com/feeds',
-                    'https://www.googleapis.com/auth/drive']
-            credentials = ServiceAccountCredentials.from_json_keyfile_name('./jsonFileFromGoogle.json', scope)
-            gc = gspread.authorize(credentials)
+            # scope = ['https://spreadsheets.google.com/feeds',
+            #         'https://www.googleapis.com/auth/drive']
+            # credentials = ServiceAccountCredentials.from_json_keyfile_name('./jsonFileFromGoogle.json', scope)
+            # gc = gspread.authorize(credentials)
             spreadsheet_key1 = '18yIcld6VZXw1MZkE0YFQVTqnpyI03p5_ZGBtWLx0xXw'
             spreadsheet_key2 = '1oF5ThuOrFfwyEJ6-40_PwqGV9UCzJwLLz1vG9wnZTWg'
             spreadsheet_key3 = '1g9_Jr0BXMqOcC5w3TKzfo7R1GJWFP-WlCQwIj2aCi2w'
@@ -125,18 +125,21 @@ if APOLLO_CSV is not None:
             progress_status.caption(f'Cargando base actual... {emojis[random.randint(0, len(emojis) - 1)]}')
             nbar=5+nbar
             progress_bar.progress(nbar)
-            UPLOAD= g2d.download(spreadsheet_key3,'APOLLO_OUTPUT', credentials=credentials,col_names=True, row_names=False)
+            # UPLOAD= g2d.download(spreadsheet_key3,'APOLLO_OUTPUT', credentials=credentials,col_names=True, row_names=False)
+            UPLOAD= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'APOLLO_OUTPUT')
 
             progress_status.caption(f'Cargando LEADS_DB... {emojis[random.randint(0, len(emojis) - 1)]}')
             nbar=5+nbar
             progress_bar.progress(nbar)
-            LEADS_DB = g2d.download(spreadsheet_key1,'LEADS_DB', credentials=credentials,col_names=True, row_names=False)
+            # LEADS_DB = g2d.download(spreadsheet_key1,'LEADS_DB', credentials=credentials,col_names=True, row_names=False)
+            LEADS_DB= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key1,'LEADS_DB')
 
             progress_status.caption(f'Cargando BLACKLIST... {emojis[random.randint(0, len(emojis) - 1)]}')
             nbar=5+nbar
             progress_bar.progress(nbar)
-            BLACKLIST= g2d.download(spreadsheet_key2,'BLACKLIST', credentials=credentials,col_names=True, row_names=False)
-
+            # BLACKLIST= g2d.download(spreadsheet_key2,'BLACKLIST', credentials=credentials,col_names=True, row_names=False)
+            BLACKLIST= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key2,'BLACKLIST')
+            
             progress_status.caption(f'Cargando BLACKLIST_WEB... {emojis[random.randint(0, len(emojis) - 1)]}')
             nbar=5+nbar
             progress_bar.progress(nbar)
