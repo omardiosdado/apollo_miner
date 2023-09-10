@@ -32,11 +32,6 @@ st.markdown(hide_default_format, unsafe_allow_html=True)
 st.image("https://i.imgur.com/XQ0ePg2.png", use_column_width='auto')
 st.caption(':turtle: V1.01')
 
-scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-credentials = ServiceAccountCredentials.from_json_keyfile_name('./jsonFileFromGoogle.json', scope)
-gc = gspread.authorize(credentials)
-# LEADS_DB = g2d.download(st.secrets['spreadsheet_key1'],'LEADS_DB', credentials=credentials,col_names=True, row_names=False)
-
 col1, col2 =st.columns([1,3])
 col1.subheader('Procesador de descargas de Apollo')
 st.divider()
@@ -96,9 +91,9 @@ if APOLLO_CSV is not None:
                     'https://www.googleapis.com/auth/drive']
             credentials = ServiceAccountCredentials.from_json_keyfile_name('./jsonFileFromGoogle.json', scope)
             gc = gspread.authorize(credentials)
-            spreadsheet_key1 = st.secrets['spreadsheet_key1']  
-            spreadsheet_key2 = st.secrets['spreadsheet_key2']  
-            spreadsheet_key3 = st.secrets['spreadsheet_key3'] 
+            spreadsheet_key1 = '18yIcld6VZXw1MZkE0YFQVTqnpyI03p5_ZGBtWLx0xXw'
+            spreadsheet_key2 = '1oF5ThuOrFfwyEJ6-40_PwqGV9UCzJwLLz1vG9wnZTWg'
+            spreadsheet_key3 = '1g9_Jr0BXMqOcC5w3TKzfo7R1GJWFP-WlCQwIj2aCi2w'
 
             progress_status.caption(f'Cargando base actual... {emojis[random.randint(0, len(emojis) - 1)]}')
             nbar=5+nbar
