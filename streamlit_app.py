@@ -143,17 +143,20 @@ if APOLLO_CSV is not None:
             progress_status.caption(f'Cargando BLACKLIST_WEB... {emojis[random.randint(0, len(emojis) - 1)]}')
             nbar=5+nbar
             progress_bar.progress(nbar)
-            BLACKLIST_WEB= g2d.download(spreadsheet_key2,'BL_WEB', credentials=credentials,col_names=True, row_names=False)
+            #BLACKLIST_WEB= g2d.download(spreadsheet_key2,'BL_WEB', credentials=credentials,col_names=True, row_names=False)
+            BLACKLIST_WEB= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key2,'BL_WEB')
 
             progress_status.caption(f'Cargando CLIENTS... {emojis[random.randint(0, len(emojis) - 1)]}')
             nbar=5+nbar
             progress_bar.progress(nbar)
-            CLIENTS= g2d.download(spreadsheet_key3,'ACTIVE_CLIENTS', credentials=credentials,col_names=True, row_names=False)
+            #CLIENTS= g2d.download(spreadsheet_key3,'ACTIVE_CLIENTS', credentials=credentials,col_names=True, row_names=False)
+            CLIENTS= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'ACTIVE_CLIENTS')
 
             progress_status.caption(f'Cargando LEADS_RESP... {emojis[random.randint(0, len(emojis) - 1)]}')
             nbar=5+nbar
             progress_bar.progress(nbar)
-            LEADS_RESP= g2d.download(spreadsheet_key2,'LEADS2.0', credentials=credentials,col_names=True, row_names=False)
+            #LEADS_RESP= g2d.download(spreadsheet_key2,'LEADS2.0', credentials=credentials,col_names=True, row_names=False)
+            LEADS_RESP= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key2,'LEADS2.0')
 
 
 
@@ -334,7 +337,8 @@ if APOLLO_CSV is not None:
             progress_status.caption(f'Cargando a sheets... {emojis[random.randint(0, len(emojis) - 1)]}')
             nbar=5+nbar
             progress_bar.progress(nbar)
-            UPLOAD = g2d.download(spreadsheet_key3,'APOLLO_OUTPUT', credentials=credentials,col_names=True, row_names=False)
+            # UPLOAD = g2d.download(spreadsheet_key3,'APOLLO_OUTPUT', credentials=credentials,col_names=True, row_names=False)
+            UPLOAD= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'APOLLO_OUTPUT')
 
 
             name_col=(UPLOAD.columns.get_loc('First Name')+1)
