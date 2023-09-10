@@ -8,3 +8,4 @@ numpy
 gspread
 oauth2client
 apify-client
+df2gspread
