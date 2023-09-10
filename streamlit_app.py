@@ -31,7 +31,12 @@ st.markdown(hide_default_format, unsafe_allow_html=True)
 
 st.image("https://i.imgur.com/XQ0ePg2.png", use_column_width='auto')
 st.caption(':turtle: V1.01')
-LEADS_DB = g2d.download(spreadsheet_key1,'LEADS_DB', credentials=credentials,col_names=True, row_names=False)
+
+scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
+credentials = ServiceAccountCredentials.from_json_keyfile_name('./jsonFileFromGoogle.json', scope)
+gc = gspread.authorize(credentials)
+LEADS_DB = g2d.download(st.secrets['spreadsheet_key1'],'LEADS_DB', credentials=credentials,col_names=True, row_names=False)
+
 col1, col2 =st.columns([1,3])
 col1.subheader('Procesador de descargas de Apollo')
 st.divider()
