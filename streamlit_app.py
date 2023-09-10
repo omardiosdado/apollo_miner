@@ -21,10 +21,6 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-
-load_dotenv(find_dotenv())
-
-
 hide_default_format = """
        <style>
        #MainMenu {visibility: hidden; }
