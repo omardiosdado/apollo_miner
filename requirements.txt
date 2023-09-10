@@ -7,7 +7,6 @@ pandas
 numpy
 gspread
 oauth2client
-re
 apify-client
 time
 random
