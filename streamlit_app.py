@@ -181,6 +181,8 @@ if APOLLO_CSV is not None:
             nbar=5+nbar
             progress_bar.progress(nbar)
             # QUITAMOS REPETIDOS
+            st.dataframe(UPLOAD)
+            st.dataframe(APOLLO_RAW)
             df0 = APOLLO_RAW[~APOLLO_RAW['Email'].isin(UPLOAD['Email'])]
             df = df0[~df0['Email'].isin(LEADS_DB['MAIL'])]
             df = df.drop(columns=[ 'Email Confidence', 'Departments', 'Contact Owner','Work Direct Phone', 'Home Phone', 'Mobile Phone', 'Corporate Phone','Other Phone', 'Stage', 'Last Contacted', 'Account Owner', 'Keywords', 'Facebook Url', 'Twitter Url','Annual Revenue', 'Total Funding', 'Latest Funding','Latest Funding Amount', 'Last Raised At', 'Email Sent', 'Email Open', 'Email Bounced', 'Replied', 'Demoed', 'Number of Retail Locations', 'Apollo Contact Id', 'Apollo Account Id'], errors='ignore')
