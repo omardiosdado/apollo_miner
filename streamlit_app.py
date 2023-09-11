@@ -421,7 +421,7 @@ if APOLLO_CSV is not None:
             progress_status.caption('Archivo cargado a sheets :plunger:')   
             progress_bar.empty()
             st.download_button("Download CSV", csv_data, key="download_df.csv", help="Click to download the DataFrame as CSV")
-            APOLLO_CSV = None
+            # APOLLO_CSV = None
             # uploaded_file.empty()
             runButton2.button('Cargar un nuevo archivo',on_click=onClickFunction2)
 
