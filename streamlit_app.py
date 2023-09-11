@@ -352,7 +352,8 @@ if APOLLO_CSV is not None:
             progress_bar.progress(nbar)
             # UPLOAD = g2d.download(spreadsheet_key3,'APOLLO_OUTPUT', credentials=credentials,col_names=True, row_names=False)
             UPLOAD= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'APOLLO_OUTPUT')
-
+            st.dataframe(UPLOAD)
+            st.dataframe(df_combined)
 
             name_col=(UPLOAD.columns.get_loc('First Name')+1)
             name_check_col=(UPLOAD.columns.get_loc('CHECK_NAME'))
