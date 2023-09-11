@@ -326,7 +326,6 @@ if APOLLO_CSV is not None:
                 #     # df6 = df6.append(row, ignore_index=True)
                     # df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
             df_combined = pd.concat([UPLOAD, df6], ignore_index=True)
-            target_sheet.remove_all_filters()
             target_sheet.clear()
             df_combined=df_combined.astype(str)
             data_to_import = [df_combined.columns.tolist()] + df_combined.values.tolist()
