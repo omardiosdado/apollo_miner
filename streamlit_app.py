@@ -235,7 +235,7 @@ if APOLLO_CSV is not None:
                     df3['SCORE_TITLE_'+row[0]] = df3['SCORE_TITLE_'+row[0]].astype(int)
                     df3['SCORE_Seniority_'+row[0]] = df3['SCORE_Seniority_'+row[0]].astype(int)
                     df3['SCORE_Industry_'+row[0]] = df3['SCORE_Industry_'+row[0]].astype(int)
-                    df3['SCORE_'+row[0]] = (df3[['SCORE_EMP_'+row[0], 'SCORE_TITLE_'+row[0],'SCORE_Seniority_'+row[0],'SCORE_Industry_'+row[0]]].sum(axis=1)/4)*df3['BLACKLIST_'+row[0]]
+                    df3['SCORE_'+row[0]] = ((df3[['SCORE_EMP_'+row[0], 'SCORE_TITLE_'+row[0],'SCORE_Seniority_'+row[0],'SCORE_Industry_'+row[0]]].sum(axis=1)/4)*df3['BLACKLIST_'+row[0]]).astype(float)
 
             dft=df3
             clientx=''
@@ -245,7 +245,7 @@ if APOLLO_CSV is not None:
                 clientx = row_client[0]
                 for index_dft, row_dft in dft.iterrows():
                     score_column = 'SCORE_' + clientx
-                    if score_column in row_dft and row_dft[score_column] == '1':
+                    if score_column in row_dft and row_dft[score_column] == 1:
                         if len(row_dft['SCORE_FINAL'])==0:
                             row_dft['SCORE_FINAL'] = clientx
                         else:
