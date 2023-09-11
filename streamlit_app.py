@@ -12,7 +12,7 @@ from streamlit_lottie import st_lottie_spinner
 import time
 import random
 from google.oauth2.service_account import Credentials
-
+from streamlit import caching
 
 
 favicon = 'https://polimata.ai/wp-content/uploads/2023/07/favicon-32x32-1.png'
@@ -77,6 +77,11 @@ def onClickFunction():
     st.session_state.click = True
 def onClickFunction2():
     st.session_state.click2 = True
+
+if st.session_state.click2:
+    caching.clear_cache()
+    st.session_state.click2 = False
+    
 
 def load_lottieurl(url2: str):
     r = requests.get(url2)
