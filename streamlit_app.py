@@ -13,6 +13,7 @@ import time
 import random
 from google.oauth2.service_account import Credentials
 import yaml
+from yaml.loader import SafeLoader
 
 
 favicon = 'https://polimata.ai/wp-content/uploads/2023/07/favicon-32x32-1.png'
