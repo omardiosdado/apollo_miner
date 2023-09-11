@@ -330,6 +330,8 @@ if APOLLO_CSV is not None:
             df_combined=df_combined.astype(str)
             data_to_import = [df_combined.columns.tolist()] + df_combined.values.tolist()
             # target_sheet.insert_rows(data_to_import, 1)
+
+            num_rowsx= data_to_import.shape[0]
             num_columnsx = len(data_to_import[0])
             def get_column_label(column_index):
                 label = ""
@@ -338,7 +340,7 @@ if APOLLO_CSV is not None:
                     label = chr(65 + remainder) + label
                 return label
             ending_column_label = get_column_label(num_columnsx)
-            range_to_updatex = f'A1:{ending_column_label}1'
+            range_to_updatex = f'A1:{ending_column_label}{num_rowsx}'
             target_sheet.update(range_to_updatex, data_to_import)
             
             progress_status.caption(f'Cargando a sheets... {emojis[random.randint(0, len(emojis) - 1)]}')
