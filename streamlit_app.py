@@ -69,7 +69,7 @@ APOLLO_CSV=col2.file_uploader('Carga el .CSV de Apollo:', type='csv')
 if 'click' not in st.session_state:
     st.session_state.click = False
 if 'click2' not in st.session_state:
-    st.session_state.click = False
+    st.session_state.click2 = False
 
 def onClickFunction():
     st.session_state.click = True
