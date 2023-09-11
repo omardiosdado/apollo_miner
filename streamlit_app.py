@@ -61,7 +61,7 @@ def load_data(url, sheet_name):
     return df
 #st.dataframe(load_data('https://docs.google.com/spreadsheets/d/1g9_Jr0BXMqOcC5w3TKzfo7R1GJWFP-WlCQwIj2aCi2w'))
 
-
+runButton2= col2.empty()
 APOLLO_CSV= col2.empty()
 APOLLO_CSV.file_uploader('Carga el .CSV de Apollo:', type='csv')
 
@@ -408,5 +408,6 @@ if APOLLO_CSV is not None:
             progress_status.caption('Archivo cargado a sheets :plunger:')   
             progress_bar.empty()
             st.download_button("Download CSV", csv_data, key="download_df.csv", help="Click to download the DataFrame as CSV")
-            APOLLO_CSV.button('Nueva Carga',on_click=onClickFunction_n)
+            runButton2.button('Procesar datos',on_click=onClickFunction)
+            APOLLO_CSV.empty()
         st.balloons()
