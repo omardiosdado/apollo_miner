@@ -261,7 +261,7 @@ if APOLLO_CSV is not None:
             nbar=5+nbar
             progress_bar.progress(nbar)
 
-            df4=dft
+            df4=df3
             # APIFY_API_TOKEN=st.secrets['APIFY_API_TOKEN']
             # def linkedin_scraper(url_test):
             #     crawl_input = {"url": url_test}
