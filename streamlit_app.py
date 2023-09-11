@@ -158,8 +158,10 @@ if APOLLO_CSV is not None:
 
             if len(UPLOAD) is not 0:
                 df0 = APOLLO_RAW[~APOLLO_RAW['Email'].isin(UPLOAD['Email'])]
+                FILTRO_REPETIDO_sheets=len(APOLLO_RAW)-len(df0)
             else:
                 df0 = APOLLO_RAW
+                FILTRO_REPETIDO_sheets=len(APOLLO_RAW)-len(df0)
             df = df0[~df0['Email'].isin(LEADS_DB['MAIL'])]
             df = df.drop(columns=[ 'Email Confidence', 'Departments', 'Contact Owner','Work Direct Phone', 'Home Phone', 'Mobile Phone', 'Corporate Phone','Other Phone', 'Stage', 'Last Contacted', 'Account Owner', 'Keywords', 'Facebook Url', 'Twitter Url','Annual Revenue', 'Total Funding', 'Latest Funding','Latest Funding Amount', 'Last Raised At', 'Email Sent', 'Email Open', 'Email Bounced', 'Replied', 'Demoed', 'Number of Retail Locations', 'Apollo Contact Id', 'Apollo Account Id'], errors='ignore')
             df.loc[:, 'DOMAIN_CHECK'] = df['Email'].str.split('@').str[1]
@@ -307,9 +309,9 @@ if APOLLO_CSV is not None:
             progress_bar.progress(nbar)
 
             df5 = df4
-            # gc = gspread.authorize(ServiceAccountCredentials.from_json_keyfile_name('./jsonFileFromGoogle.json', ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']))
+            gc = gspread.authorize(ServiceAccountCredentials.from_json_keyfile_name('./jsonFileFromGoogle.json', ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']))
             # client
-            gc = gspread.authorize(ServiceAccountCredentials.from_json_keyfile_name(client, ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']))
+            # gc = gspread.authorize(ServiceAccountCredentials.from_json_keyfile_name(client, ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']))
 
             worksheet = gc.open_by_key(spreadsheet_key3)
             target_sheet = worksheet.worksheet('APOLLO_OUTPUT')
@@ -384,11 +386,20 @@ if APOLLO_CSV is not None:
             target_sheet.format(chr(64 + Country_col)+':'+chr(64 + Country_col),format_zero)
 
             datos.dataframe(df6)
-            st.caption((str(len(df4)))+' leads procesados de '+(str(len(APOLLO_RAW))))
+            LIMPIOS_TOT=((str(len(df4)))+' leads procesados de '+(str(len(APOLLO_RAW))))
             st.session_state.click = False
             progress_bar.progress(100)
             progress_status.caption('Archivo cargado a sheets :plunger:')   
             progress_bar.empty()
             st.download_button("Download CSV", csv_data, key="download_df.csv", help="Click to download the DataFrame as CSV")
+            code = f'''
+             Leads repetidos en base PROSPECTOS: {FILTRO_REPETIDO_sheets}
+             Leads repetidos en base LEADS_DB: {FILTRO_REPETIDO}
+             Leads con correo no válido: {FILTRO_VACIOS}
+             Leads con campos importantes vacios: {FILTRO_EMAIL}
+             Leads con País no válido: {FILTRO_CONTRY}
+            Leads removidos totales: {LIMPIOS_TOT}
+            '''
+            st.code(code, line_numbers=False)
 
         st.balloons()
