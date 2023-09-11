@@ -309,9 +309,9 @@ if APOLLO_CSV is not None:
             progress_bar.progress(nbar)
 
             df5 = df4
-            gc = gspread.authorize(ServiceAccountCredentials.from_json_keyfile_name('./jsonFileFromGoogle.json', ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']))
+            # gc = gspread.authorize(ServiceAccountCredentials.from_json_keyfile_name('./jsonFileFromGoogle.json', ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']))
             # client
-            # gc = gspread.authorize(ServiceAccountCredentials.from_json_keyfile_name(client, ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']))
+            gc = gspread.authorize(credentials)
 
             worksheet = gc.open_by_key(spreadsheet_key3)
             target_sheet = worksheet.worksheet('APOLLO_OUTPUT')
