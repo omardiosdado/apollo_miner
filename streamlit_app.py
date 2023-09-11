@@ -272,7 +272,23 @@ if authentication_status== True:
                                 dft.at[index_dft, 'SCORE_FINAL'] = clientx
                             else:
                                 dft.at[index_dft, 'SCORE_FINAL'] = clientx + '|' + row_dft['SCORE_FINAL']
-                
+                #################                
+                clientx=''
+                BL_FINAL=''
+                dft['BL_FINAL']=BL_FINAL
+                for index_client, row_client in CLIENTS.iterrows():
+                    clientx = row_client['CLIENT']
+                    for index_dft, row_dft in dft.iterrows():
+                        score_column = 'BLACKLIST_' + clientx
+                        if score_column in row_dft and row_dft[score_column] == '0':
+                            if row_dft['BL_FINAL']=='':
+                                dft.at[index_dft, 'BL_FINAL'] = clientx
+                            else:
+                                dft.at[index_dft, 'BL_FINAL'] = clientx + '|' + row_dft['SCORE_FINAL']
+                dft['BL_FINAL'].replace('', 'NA', inplace=True)
+                column = dft.pop('BL_FINAL')
+                dft.insert(0, column.name, column)
+                ##############
                 dft['SCORE_FINAL'].replace('', 'NA', inplace=True)
                 column = dft.pop('SCORE_FINAL')
                 dft.insert(0, column.name, column)
