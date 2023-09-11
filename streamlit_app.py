@@ -62,9 +62,9 @@ def load_data(url, sheet_name):
 #st.dataframe(load_data('https://docs.google.com/spreadsheets/d/1g9_Jr0BXMqOcC5w3TKzfo7R1GJWFP-WlCQwIj2aCi2w'))
 
 runButton2= col2.empty()
-APOLLO_CSV= col2.empty()
-APOLLO_CSV.file_uploader('Carga el .CSV de Apollo:', type='csv')
-
+# APOLLO_CSV= col2.empty()
+# APOLLO_CSV.file_uploader('Carga el .CSV de Apollo:', type='csv')
+APOLLO_CSV=col2.file_uploader('Carga el .CSV de Apollo:', type='csv')
 
 if 'click' not in st.session_state:
     st.session_state.click = False
