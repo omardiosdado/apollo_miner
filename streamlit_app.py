@@ -386,19 +386,19 @@ if APOLLO_CSV is not None:
             target_sheet.format(chr(64 + Country_col)+':'+chr(64 + Country_col),format_zero)
 
             datos.dataframe(df6)
-            LIMPIOS_TOT=((str(len(df4)))+' de '+(str(len(APOLLO_RAW))))
+            LIMPIOS_TOT=(str(len(APOLLO_RAW)-len(df4)))
             st.session_state.click = False
             progress_bar.progress(100)
             progress_status.caption('Archivo cargado a sheets :plunger:')   
             progress_bar.empty()
             
             code = f'''
-            
-             -Leads repetidos en base PROSPECTOS: {FILTRO_REPETIDO_sheets}
-             -Leads repetidos en base LEADS_DB: {FILTRO_REPETIDO}
-             -Leads con correo no válido: {FILTRO_VACIOS}
-             -Leads con campos importantes vacios: {FILTRO_EMAIL}
-             -Leads con País no válido: {FILTRO_CONTRY}
+            Leads iniciales: {(str(len(APOLLO_RAW)))}
+             -> Leads repetidos en base PROSPECTOS: {FILTRO_REPETIDO_sheets}
+             -> Leads repetidos en base LEADS_DB: {FILTRO_REPETIDO}
+             -> Leads con correo no válido: {FILTRO_VACIOS}
+             -> Leads con campos importantes vacios: {FILTRO_EMAIL}
+             -> Leads con País no válido: {FILTRO_CONTRY}
             Leads NO procesados totales: {LIMPIOS_TOT}
             '''
             st.code(code, line_numbers=False)
