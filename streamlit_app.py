@@ -237,31 +237,31 @@ if APOLLO_CSV is not None:
                     df3['SCORE_Industry_'+row[0]] = df3['SCORE_Industry_'+row[0]].astype(int)
                     df3['SCORE_'+row[0]] = (df3[['SCORE_EMP_'+row[0], 'SCORE_TITLE_'+row[0],'SCORE_Seniority_'+row[0],'SCORE_Industry_'+row[0]]].sum(axis=1)/4)*df3['BLACKLIST_'+row[0]]
 
-            # dft=df3
-            # client=''
-            # SCORE_FINAL=''
-            # dft['SCORE_FINAL']=SCORE_FINAL
-            # for index_client, row_client in CLIENTS.iterrows():
-            #     client = row_client[0]
-            #     for index_dft, row_dft in dft.iterrows():
-            #         score_column = 'SCORE_' + client
-            #         if score_column in row_dft and row_dft[score_column] == '1.0':
-            #             if len(row_dft['SCORE_FINAL'])==0:
-            #                 row_dft['SCORE_FINAL'] = client
-            #             else:
-            #                 row_dft['SCORE_FINAL'] = client + '|' + row_dft['SCORE_FINAL']
+            dft=df3
+            clientx=''
+            SCORE_FINAL=''
+            dft['SCORE_FINAL']=SCORE_FINAL
+            for index_client, row_client in CLIENTS.iterrows():
+                clientx = row_client[0]
+                for index_dft, row_dft in dft.iterrows():
+                    score_column = 'SCORE_' + clientx
+                    if score_column in row_dft and row_dft[score_column] == '1.0':
+                        if len(row_dft['SCORE_FINAL'])==0:
+                            row_dft['SCORE_FINAL'] = clientx
+                        else:
+                            row_dft['SCORE_FINAL'] = clientx + '|' + row_dft['SCORE_FINAL']
             
-            # column = dft.pop('SCORE_FINAL')
-            # dft.insert(0, column.name, column)
-            # column = dft.pop('CHECK_SCORE')
-            # dft.insert(0, column.name, column)
+            column = dft.pop('SCORE_FINAL')
+            dft.insert(0, column.name, column)
+            column = dft.pop('CHECK_SCORE')
+            dft.insert(0, column.name, column)
 
             
             progress_status.caption(f'Scrapeando linkedin... {emojis[random.randint(0, len(emojis) - 1)]}')
             nbar=5+nbar
             progress_bar.progress(nbar)
 
-            df4=df3
+            df4=dft
             # APIFY_API_TOKEN=st.secrets['APIFY_API_TOKEN']
             # def linkedin_scraper(url_test):
             #     crawl_input = {"url": url_test}
