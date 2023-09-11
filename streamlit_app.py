@@ -319,6 +319,14 @@ if APOLLO_CSV is not None:
             progress_bar.progress(nbar)
 
             df5 = df4
+
+            # scope = ['https://spreadsheets.google.com/feeds',
+            #         'https://www.googleapis.com/auth/drive']
+            # credentials = ServiceAccountCredentials.from_json_keyfile_name('./jsonFileFromGoogle.json', scope)
+            
+
+
+            gc = gspread.authorize(ServiceAccountCredentials.from_json_keyfile_name('./jsonFileFromGoogle.json', ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']))
             worksheet = gc.open_by_key(spreadsheet_key3)
             target_sheet = worksheet.worksheet('APOLLO_OUTPUT')
             df6 = pd.DataFrame(columns=UPLOAD.columns)
