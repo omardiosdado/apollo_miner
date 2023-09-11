@@ -330,14 +330,11 @@ if APOLLO_CSV is not None:
             worksheet = gc.open_by_key(spreadsheet_key3)
             target_sheet = worksheet.worksheet('APOLLO_OUTPUT')
             df6 = pd.DataFrame(columns=UPLOAD.columns)
-            st.dataframe(UPLOAD)
-            st.dataframe(df6)
-            st.dataframe(df5)
             for index, row in df5.iterrows():
                 # Check if the row from df2 is not in df
                 if UPLOAD.empty:
                     df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
-                if not UPLOAD.empty and UPLOAD[(UPLOAD['Email'] == row['Email'])].any().any():
+                if not UPLOAD[(UPLOAD['Email'] == row['Email'])].any().any():
                     # If the row is not in df, append it to df3
                     # df6 = df6.append(row, ignore_index=True)
                     df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
@@ -353,7 +350,9 @@ if APOLLO_CSV is not None:
             # UPLOAD = g2d.download(spreadsheet_key3,'APOLLO_OUTPUT', credentials=credentials,col_names=True, row_names=False)
             UPLOAD= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'APOLLO_OUTPUT')
             st.dataframe(UPLOAD)
-            st.dataframe(df_combined)
+            st.dataframe(df6)
+            st.dataframe(df5)
+            st.dataframe(data_to_import)
 
             name_col=(UPLOAD.columns.get_loc('First Name')+1)
             name_check_col=(UPLOAD.columns.get_loc('CHECK_NAME'))
