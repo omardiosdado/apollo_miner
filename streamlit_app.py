@@ -350,13 +350,14 @@ if APOLLO_CSV is not None:
             st.dataframe(df6)
             st.dataframe(UPLOAD)
             for index, row in df5.iterrows():
-                # Check if the row from df2 is not in df
-                if len(UPLOAD) == 0:
-                    df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
-                if not UPLOAD[(UPLOAD['Email'] == row['Email'])].any().any() and len(UPLOAD) != 0:
-                    # If the row is not in df, append it to df3
-                    # df6 = df6.append(row, ignore_index=True)
-                    df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
+                df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
+                # # Check if the row from df2 is not in df
+                # if len(UPLOAD) == 0:
+                #     df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
+                # if not UPLOAD[(UPLOAD['Email'] == row['Email'])].any().any() and len(UPLOAD) != 0:
+                #     # If the row is not in df, append it to df3
+                #     # df6 = df6.append(row, ignore_index=True)
+                    # df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
             df_combined = pd.concat([UPLOAD, df6], ignore_index=True)
             target_sheet.clear()
             df_combined=df_combined.astype(str)
