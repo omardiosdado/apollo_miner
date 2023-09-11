@@ -1,0 +1,21 @@
+credentials:
+  usernames:
+    lsmel:
+      email: xxx@gmail.com
+      name: Melanie
+      password: $2b$12$IibhNfdtgpKIw3xlJ/.bgOxbm9azc1569YHJ7GUequT1fFpmHk6im # To be replaced with hashed password
+    odiosdado:
+      email: xxx@gmail.com
+      name: Omar
+      password: $2b$12$K3d2gYJajTrRE12GcM/qTe5xuDPexFAYB0diDswaQ69iCHNLDvyOi # To be replaced with hashed password
+    lsdan:
+      email: xxx@gmail.com
+      name: Danny
+      password: $2b$12$K3d2gYJajTrRE12GcM/qTe5xuDPexFAYB0diDswaQ69iCHNLDvyOi # To be replaced with hashed password
+cookie:
+  expiry_days: 30
+  key: some_signature_key # Must be string
+  name: some_cookie_name
+preauthorized:
+  emails:
+  - 
