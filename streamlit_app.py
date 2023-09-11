@@ -245,7 +245,7 @@ if APOLLO_CSV is not None:
                 clientx = row_client[0]
                 for index_dft, row_dft in dft.iterrows():
                     score_column = 'SCORE_' + clientx
-                    if score_column in row_dft and row_dft[score_column] == 100:
+                    if score_column in row_dft and row_dft[score_column] == '100':
                         if len(row_dft['SCORE_FINAL'])==0:
                             row_dft['SCORE_FINAL'] = clientx
                         else:
