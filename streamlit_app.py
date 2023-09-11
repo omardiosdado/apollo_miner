@@ -21,13 +21,13 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# hide_default_format = """
-#        <style>
-#        #MainMenu {visibility: hidden; }
-#        footer {visibility: hidden;}
-#        </style>
-#        """
-# st.markdown(hide_default_format, unsafe_allow_html=True)
+hide_default_format = """
+       <style>
+       #MainMenu {visibility: hidden; }
+       footer {visibility: hidden;}
+       </style>
+       """
+st.markdown(hide_default_format, unsafe_allow_html=True)
 
 st.image("https://i.imgur.com/XQ0ePg2.png", use_column_width='auto')
 st.caption(':turtle: V1.01')
