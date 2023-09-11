@@ -349,10 +349,10 @@ if APOLLO_CSV is not None:
             progress_bar.progress(nbar)
             # UPLOAD = g2d.download(spreadsheet_key3,'APOLLO_OUTPUT', credentials=credentials,col_names=True, row_names=False)
             UPLOAD= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'APOLLO_OUTPUT')
-            st.dataframe(UPLOAD)
-            st.dataframe(df6)
-            st.dataframe(df5)
-            st.dataframe(data_to_import)
+            # st.dataframe(UPLOAD)
+            # st.dataframe(df6)
+            # st.dataframe(df5)
+            # st.dataframe(data_to_import)
 
             name_col=(UPLOAD.columns.get_loc('First Name')+1)
             name_check_col=(UPLOAD.columns.get_loc('CHECK_NAME'))
@@ -401,7 +401,7 @@ if APOLLO_CSV is not None:
             target_sheet.format(chr(64 + Company_col)+':'+chr(64 + Company_col),format_zero)
             target_sheet.format(chr(64 + Country_col)+':'+chr(64 + Country_col),format_zero)
 
-            datos.dataframe(df4)
+            datos.dataframe(df6)
             st.session_state.click = False
             progress_bar.progress(100)
             progress_status.caption('Archivo cargado a sheets :plunger:')   
