@@ -331,7 +331,14 @@ if APOLLO_CSV is not None:
             data_to_import = [df_combined.columns.tolist()] + df_combined.values.tolist()
             # target_sheet.insert_rows(data_to_import, 1)
             num_columnsx = len(data_to_import[0])
-            range_to_updatex = f'A1:{chr(65 + num_columnsx - 1)}1'
+            def get_column_label(column_index):
+                label = ""
+                while column_index > 0:
+                    column_index, remainder = divmod(column_index - 1, 26)
+                    label = chr(65 + remainder) + label
+                return label
+            ending_column_label = get_column_label(num_columnsx)
+            range_to_updatex = f'A1:{ending_column_label}1'
             target_sheet.update(range_to_updatex, data_to_import)
             
             progress_status.caption(f'Cargando a sheets... {emojis[random.randint(0, len(emojis) - 1)]}')
