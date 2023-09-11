@@ -309,8 +309,6 @@ if APOLLO_CSV is not None:
             progress_bar.progress(nbar)
 
             df5 = df4
-            # gc = gspread.authorize(ServiceAccountCredentials.from_json_keyfile_name('./jsonFileFromGoogle.json', ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']))
-            # client
             gc = gspread.authorize(credentials)
 
             worksheet = gc.open_by_key(spreadsheet_key3)
@@ -400,6 +398,7 @@ if APOLLO_CSV is not None:
              -> Leads con campos importantes vacios: {FILTRO_EMAIL}
              -> Leads con País no válido: {FILTRO_CONTRY}
             Leads NO procesados totales: {LIMPIOS_TOT}
+            Procesados: {(str(len(df4)))}
             '''
             st.code(code, line_numbers=False)
             st.download_button("Download CSV", csv_data, key="download_df.csv", help="Click to download the DataFrame as CSV")
