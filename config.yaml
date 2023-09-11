@@ -12,6 +12,10 @@ credentials:
       email: xxx@gmail.com
       name: Danny
       password: $2b$12$K3d2gYJajTrRE12GcM/qTe5xuDPexFAYB0diDswaQ69iCHNLDvyOi # To be replaced with hashed password
+    oobregon:
+      email: xxx@gmail.com
+      name: Oscar
+      password: $2b$12$K3d2gYJajTrRE12GcM/qTe5xuDPexFAYB0diDswaQ69iCHNLDvyOi # To be replaced with hashed password
 cookie:
   expiry_days: 30
   key: some_signature_key # Must be string
