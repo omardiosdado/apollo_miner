@@ -242,7 +242,7 @@ if APOLLO_CSV is not None:
             SCORE_FINAL='NA'
             dft['SCORE_FINAL']=SCORE_FINAL
             for index_client, row_client in CLIENTS.iterrows():
-                clientx = row_client[0]
+                clientx = row_client['CLIENT']
                 for index_dft, row_dft in dft.iterrows():
                     score_column = 'SCORE_' + clientx
                     row_dft['SCORE_FINAL'] = score_column
