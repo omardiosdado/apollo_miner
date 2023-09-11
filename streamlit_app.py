@@ -330,7 +330,7 @@ if APOLLO_CSV is not None:
             worksheet = gc.open_by_key(spreadsheet_key3)
             target_sheet = worksheet.worksheet('APOLLO_OUTPUT')
             df6 = pd.DataFrame(columns=UPLOAD.columns)
-
+            st.dataframe(df5)
             for index, row in df5.iterrows():
                 # Check if the row from df2 is not in df
                 if not UPLOAD[(UPLOAD['Email'] == row['Email'])].any().any():
