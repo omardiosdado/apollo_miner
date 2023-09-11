@@ -53,7 +53,7 @@ client = gspread.authorize(credentials)
 
 # Perform SQL query on the Google Sheet.
 # Uses st.cache_data to only rerun when the query changes or after 10 min.
-@st.cache_data(ttl=600)
+# @st.cache_data(ttl=600)
 def load_data(url, sheet_name):
     sh = client.open_by_url(url)
     df = pd.DataFrame(sh.worksheet(sheet_name).get_all_records())
@@ -136,7 +136,8 @@ if APOLLO_CSV is not None:
             progress_bar.progress(nbar)
             # UPLOAD= g2d.download(spreadsheet_key3,'APOLLO_OUTPUT', credentials=credentials,col_names=True, row_names=False)
             UPLOAD= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'APOLLO_OUTPUT')
-
+            st.dataframe(UPLOAD)
+            
             progress_status.caption(f'Cargando LEADS_DB... {emojis[random.randint(0, len(emojis) - 1)]}')
             nbar=5+nbar
             progress_bar.progress(nbar)
