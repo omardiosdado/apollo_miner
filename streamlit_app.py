@@ -386,20 +386,21 @@ if APOLLO_CSV is not None:
             target_sheet.format(chr(64 + Country_col)+':'+chr(64 + Country_col),format_zero)
 
             datos.dataframe(df6)
-            LIMPIOS_TOT=((str(len(df4)))+' leads procesados de '+(str(len(APOLLO_RAW))))
+            LIMPIOS_TOT=((str(len(df4)))+' de '+(str(len(APOLLO_RAW))))
             st.session_state.click = False
             progress_bar.progress(100)
             progress_status.caption('Archivo cargado a sheets :plunger:')   
             progress_bar.empty()
-            st.download_button("Download CSV", csv_data, key="download_df.csv", help="Click to download the DataFrame as CSV")
+            
             code = f'''
-             Leads repetidos en base PROSPECTOS: {FILTRO_REPETIDO_sheets}
-             Leads repetidos en base LEADS_DB: {FILTRO_REPETIDO}
-             Leads con correo no válido: {FILTRO_VACIOS}
-             Leads con campos importantes vacios: {FILTRO_EMAIL}
-             Leads con País no válido: {FILTRO_CONTRY}
-            Leads removidos totales: {LIMPIOS_TOT}
+            
+             -Leads repetidos en base PROSPECTOS: {FILTRO_REPETIDO_sheets}
+             -Leads repetidos en base LEADS_DB: {FILTRO_REPETIDO}
+             -Leads con correo no válido: {FILTRO_VACIOS}
+             -Leads con campos importantes vacios: {FILTRO_EMAIL}
+             -Leads con País no válido: {FILTRO_CONTRY}
+            Leads NO procesados totales: {LIMPIOS_TOT}
             '''
             st.code(code, line_numbers=False)
-
+            st.download_button("Download CSV", csv_data, key="download_df.csv", help="Click to download the DataFrame as CSV")
         st.balloons()
