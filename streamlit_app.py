@@ -29,7 +29,8 @@ hide_default_format = """
        """
 st.markdown(hide_default_format, unsafe_allow_html=True)
 
-st.image("https://i.imgur.com/XQ0ePg2.png", use_column_width='auto')
+# st.image("https://i.imgur.com/XQ0ePg2.png", use_column_width='auto')
+st.title('Procesador de Leads')
 st.caption(':turtle: V1.01')
 
 col1, col2 =st.columns([1,3])
