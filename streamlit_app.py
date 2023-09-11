@@ -181,8 +181,7 @@ if APOLLO_CSV is not None:
             nbar=5+nbar
             progress_bar.progress(nbar)
             # QUITAMOS REPETIDOS
-            st.dataframe(UPLOAD)
-            st.dataframe(APOLLO_RAW)
+
             if len(UPLOAD) is not 0:
                 df0 = APOLLO_RAW[~APOLLO_RAW['Email'].isin(UPLOAD['Email'])]
             else:
@@ -344,7 +343,11 @@ if APOLLO_CSV is not None:
             gc = gspread.authorize(ServiceAccountCredentials.from_json_keyfile_name('./jsonFileFromGoogle.json', ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']))
             worksheet = gc.open_by_key(spreadsheet_key3)
             target_sheet = worksheet.worksheet('APOLLO_OUTPUT')
-            df6 = pd.DataFrame(columns=UPLOAD.columns)
+             = pd.DataFrame(columns=UPLOAD.columns)
+            
+            st.dataframe(df5)
+            st.dataframe(df6)
+            st.dataframe(UPLOAD)
             for index, row in df5.iterrows():
                 # Check if the row from df2 is not in df
                 if len(UPLOAD) == 0:
