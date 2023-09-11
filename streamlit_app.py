@@ -78,7 +78,7 @@ def onClickFunction2():
     st.session_state.click2 = True
 
 if st.session_state.click2:
-    # st.caching.clear_cache()
+    APOLLO_CSV = uploaded_file.file_uploader('Carga el .CSV de Apollo:', type=['csv'])
     st.session_state.click2 = False
     
 
@@ -136,7 +136,6 @@ if APOLLO_CSV is not None:
             progress_bar.progress(nbar)
             # UPLOAD= g2d.download(spreadsheet_key3,'APOLLO_OUTPUT', credentials=credentials,col_names=True, row_names=False)
             UPLOAD= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'APOLLO_OUTPUT')
-            st.dataframe(UPLOAD)
             
             progress_status.caption(f'Cargando LEADS_DB... {emojis[random.randint(0, len(emojis) - 1)]}')
             nbar=5+nbar
@@ -346,9 +345,7 @@ if APOLLO_CSV is not None:
             target_sheet = worksheet.worksheet('APOLLO_OUTPUT')
             df6 = pd.DataFrame(columns=UPLOAD.columns)
             
-            st.dataframe(df5)
-            st.dataframe(df6)
-            st.dataframe(UPLOAD)
+
             for index, row in df5.iterrows():
                 df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
                 # # Check if the row from df2 is not in df
@@ -369,10 +366,6 @@ if APOLLO_CSV is not None:
             progress_bar.progress(nbar)
             # UPLOAD = g2d.download(spreadsheet_key3,'APOLLO_OUTPUT', credentials=credentials,col_names=True, row_names=False)
             UPLOAD= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'APOLLO_OUTPUT')
-            st.dataframe(UPLOAD)
-            st.dataframe(df6)
-            st.dataframe(df5)
-            st.dataframe(data_to_import)
 
             name_col=(UPLOAD.columns.get_loc('First Name')+1)
             name_check_col=(UPLOAD.columns.get_loc('CHECK_NAME'))
@@ -428,9 +421,9 @@ if APOLLO_CSV is not None:
             progress_status.caption('Archivo cargado a sheets :plunger:')   
             progress_bar.empty()
             st.download_button("Download CSV", csv_data, key="download_df.csv", help="Click to download the DataFrame as CSV")
-            
-            APOLLO_CSV = None
-            uploaded_file.empty()
+            APOLLO_CSV.empty()
+            # APOLLO_CSV = None
+            # uploaded_file.empty()
             runButton2.button('Cargar un nuevo archivo',on_click=onClickFunction2)
 
         st.balloons()
