@@ -326,10 +326,14 @@ if APOLLO_CSV is not None:
                 #     # df6 = df6.append(row, ignore_index=True)
                     # df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
             df_combined = pd.concat([UPLOAD, df6], ignore_index=True)
+            target_sheet.remove_all_filters()
             target_sheet.clear()
             df_combined=df_combined.astype(str)
             data_to_import = [df_combined.columns.tolist()] + df_combined.values.tolist()
-            target_sheet.insert_rows(data_to_import, 1)
+            # target_sheet.insert_rows(data_to_import, 1)
+            num_columnsx = len(data_to_import[0])
+            range_to_updatex = f'A1:{chr(65 + num_columnsx - 1)}1'
+            target_sheet.update(range_to_updatex, data_to_import)
             
             progress_status.caption(f'Cargando a sheets... {emojis[random.randint(0, len(emojis) - 1)]}')
             nbar=5+nbar
