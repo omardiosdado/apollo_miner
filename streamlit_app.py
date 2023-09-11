@@ -331,7 +331,7 @@ if APOLLO_CSV is not None:
             data_to_import = [df_combined.columns.tolist()] + df_combined.values.tolist()
             # target_sheet.insert_rows(data_to_import, 1)
 
-            num_rowsx= data_to_import.shape[0]
+            num_rowsx= len(data_to_import)
             num_columnsx = len(data_to_import[0])
             def get_column_label(column_index):
                 label = ""
