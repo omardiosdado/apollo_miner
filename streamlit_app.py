@@ -250,8 +250,8 @@ if APOLLO_CSV is not None:
                             row_dft['SCORE_FINAL'] = clientx
                         else:
                             row_dft['SCORE_FINAL'] = clientx + '|' + row_dft['SCORE_FINAL']
-                    else:
-                        row_dft['SCORE_FINAL'] = row_dft['SCORE_FINAL'] + '|' + row_dft[score_column]
+                    if score_column in row_dft:
+                        row_dft['SCORE_FINAL'] = row_dft[score_column] + '|' + row_dft['SCORE_FINAL']
                         
             
             column = dft.pop('SCORE_FINAL')
