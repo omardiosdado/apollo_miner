@@ -239,28 +239,23 @@ if APOLLO_CSV is not None:
 
             dft=df3
             clientx=''
-            SCORE_FINAL='NA'
+            SCORE_FINAL=''
             dft['SCORE_FINAL']=SCORE_FINAL
             for index_client, row_client in CLIENTS.iterrows():
                 clientx = row_client['CLIENT']
                 for index_dft, row_dft in dft.iterrows():
                     score_column = 'SCORE_' + clientx
-                    row_dft['SCORE_FINAL'] = score_column
                     if score_column in row_dft and row_dft[score_column] == '100':
-                        if len(row_dft['SCORE_FINAL'])==0:
-                            row_dft['SCORE_FINAL'] = clientx
+                        if row_dft['SCORE_FINAL']=='':
+                            dft.at[index_dft, 'SCORE_FINAL'] = clientx
                         else:
-                            row_dft['SCORE_FINAL'] = clientx + '|' + row_dft['SCORE_FINAL']
-                    if score_column in row_dft:
-                        row_dft['SCORE_FINAL'] = row_dft[score_column] + '|' + row_dft['SCORE_FINAL']
-                    else:
-                        row_dft['SCORE_FINAL'] = score_column
+                            dft.at[index_dft, 'SCORE_FINAL'] = clientx + '|' + row_dft['SCORE_FINAL']
             
+            dft['SCORE_FINAL'].replace('', 'NA', inplace=True)
             column = dft.pop('SCORE_FINAL')
             dft.insert(0, column.name, column)
             column = dft.pop('CHECK_SCORE')
             dft.insert(0, column.name, column)
-
             
             progress_status.caption(f'Scrapeando linkedin... {emojis[random.randint(0, len(emojis) - 1)]}')
             nbar=5+nbar
