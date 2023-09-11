@@ -335,7 +335,8 @@ if APOLLO_CSV is not None:
                 # Check if the row from df2 is not in df
                 if not UPLOAD[(UPLOAD['Email'] == row['Email'])].any().any():
                     # If the row is not in df, append it to df3
-                    df6 = df6.append(row, ignore_index=True)
+                    # df6 = df6.append(row, ignore_index=True)
+                    df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
             df_combined = pd.concat([UPLOAD, df6], ignore_index=True)
             target_sheet.clear()
             df_combined=df_combined.astype(str)
