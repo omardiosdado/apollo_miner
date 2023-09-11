@@ -34,7 +34,7 @@ st.title('Procesador de Leads')
 st.caption(':turtle: V1.01')
 
 col1, col2 =st.columns([1,3])
-col1.text('Elige el output de descargas de Apollo')
+col1.subheader('Elige el output de descargas de Apollo')
 st.divider()
 
 
