@@ -280,7 +280,7 @@ if authentication_status== True:
                     clientx = row_client['CLIENT']
                     for index_dft, row_dft in dft.iterrows():
                         score_column = 'BLACKLIST_' + clientx
-                        if score_column in row_dft and row_dft[score_column] == '0':
+                        if score_column in row_dft and row_dft[score_column] == 0:
                             if row_dft['BL_FINAL']=='':
                                 dft.at[index_dft, 'BL_FINAL'] = clientx
                             else:
