@@ -12,7 +12,6 @@ from streamlit_lottie import st_lottie_spinner
 import time
 import random
 from google.oauth2.service_account import Credentials
-from streamlit import caching
 
 
 favicon = 'https://polimata.ai/wp-content/uploads/2023/07/favicon-32x32-1.png'
@@ -54,7 +53,7 @@ client = gspread.authorize(credentials)
 
 # Perform SQL query on the Google Sheet.
 # Uses st.cache_data to only rerun when the query changes or after 10 min.
-@st.cache_data(ttl=600)
+# @st.cache_data(ttl=600)
 def load_data(url, sheet_name):
     sh = client.open_by_url(url)
     df = pd.DataFrame(sh.worksheet(sheet_name).get_all_records())
@@ -79,7 +78,7 @@ def onClickFunction2():
     st.session_state.click2 = True
 
 if st.session_state.click2:
-    caching.clear_cache()
+    # st.caching.clear_cache()
     st.session_state.click2 = False
     
 
