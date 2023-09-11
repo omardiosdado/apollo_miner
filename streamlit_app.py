@@ -239,7 +239,7 @@ if APOLLO_CSV is not None:
 
             dft=df3
             clientx=''
-            SCORE_FINAL=''
+            SCORE_FINAL='NA'
             dft['SCORE_FINAL']=SCORE_FINAL
             for index_client, row_client in CLIENTS.iterrows():
                 clientx = row_client[0]
@@ -252,7 +252,8 @@ if APOLLO_CSV is not None:
                             row_dft['SCORE_FINAL'] = clientx + '|' + row_dft['SCORE_FINAL']
                     if score_column in row_dft:
                         row_dft['SCORE_FINAL'] = row_dft[score_column] + '|' + row_dft['SCORE_FINAL']
-                        
+                    else:
+                        row_dft['SCORE_FINAL'] = score_column
             
             column = dft.pop('SCORE_FINAL')
             dft.insert(0, column.name, column)
