@@ -68,9 +68,13 @@ APOLLO_CSV=col2.file_uploader('Carga el .CSV de Apollo:', type='csv')
 
 if 'click' not in st.session_state:
     st.session_state.click = False
+if 'click2' not in st.session_state:
+    st.session_state.click = False
 
 def onClickFunction():
     st.session_state.click = True
+def onClickFunction2():
+    st.session_state.click2 = True
 
 def load_lottieurl(url2: str):
     r = requests.get(url2)
