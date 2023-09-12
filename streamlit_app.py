@@ -292,6 +292,7 @@ if authentication_status== True:
                 dft.pop('Company')
                 dft['Country']=dft['Country']+'_'+dft['Company Country']
                 dft.pop('Company Country')
+                dft['DEPURAR']='NA'
                 ##############
                 dft['SCORE_FINAL'].replace('', 'NA', inplace=True)
                 column = dft.pop('SCORE_FINAL')
