@@ -290,6 +290,8 @@ if authentication_status== True:
                 dft.insert(0, column.name, column)
                 dft.pop('Email Status')
                 dft.pop('Company')
+                dft['Country']=dft['Country']+'_'+dft['Company Country']
+                dft.pop('Company Country')
                 ##############
                 dft['SCORE_FINAL'].replace('', 'NA', inplace=True)
                 column = dft.pop('SCORE_FINAL')
