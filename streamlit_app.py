@@ -196,8 +196,8 @@ if authentication_status== True:
                 df2 = df1[df1['Email Status'] == 'Verified']
                 FILTRO_EMAIL=len(df1)-len(df2)
                 #QUITAMOS COUNTRY <> MEX
-                df3=df2
-                #df3 = df2[(df2['Country'] == 'Mexico') | (df2['Company Country'] == 'Mexico')]
+                #df3=df2
+                df3 = df2[(df2['Country'] == 'Mexico') | (df2['Company Country'] == 'Mexico')]
                 FILTRO_CONTRY=len(df2)-len(df3)
                 progress_status.caption(f'Validando info de Apollo... {emojis[random.randint(0, len(emojis) - 1)]}')
                 nbar=5+nbar
