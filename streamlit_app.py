@@ -196,8 +196,8 @@ if authentication_status== True:
                 df2 = df1[df1['Email Status'] == 'Verified']
                 FILTRO_EMAIL=len(df1)-len(df2)
                 #QUITAMOS COUNTRY <> MEX
-                #df3=df2
-                df3 = df2[(df2['Country'] == 'Mexico') | (df2['Company Country'] == 'Mexico')]
+                df3=df2
+                #df3 = df2[(df2['Country'] == 'Mexico') | (df2['Company Country'] == 'Mexico')]
                 FILTRO_CONTRY=len(df2)-len(df3)
                 progress_status.caption(f'Validando info de Apollo... {emojis[random.randint(0, len(emojis) - 1)]}')
                 nbar=5+nbar
@@ -241,8 +241,17 @@ if authentication_status== True:
                         # Score EMPLEADOS
                         EMPLOYEES=LEADS_DB[LEADS_DB['MAIL'].isin(df_client['EMAIL'])][['EMPLOYEES']].drop_duplicates().reset_index(drop=True)
                         EMPLOYEES['EMPLOYEES'] = pd.to_numeric(EMPLOYEES['EMPLOYEES'], errors='coerce')
-                        EMP_MIN=(min(EMPLOYEES.dropna()['EMPLOYEES']))
-                        EMP_MAX=(max(EMPLOYEES.dropna()['EMPLOYEES']))    
+                        if not EMPLOYEES.dropna().empty:
+                            EMP_MIN = min(EMPLOYEES.dropna()['EMPLOYEES'])
+                            EMP_MAX = max(EMPLOYEES.dropna()['EMPLOYEES'])
+                        else:
+                            # Handle the case when EMPLOYEES is empty
+                            EMP_MIN = None  # or some default value
+                            EMP_MAX = None  # or some default value
+
+                        
+                        # EMP_MIN=(min(EMPLOYEES.dropna()['EMPLOYEES']))
+                        # EMP_MAX=(max(EMPLOYEES.dropna()['EMPLOYEES']))    
                         df3['SCORE_EMP_'+row[0]] = (df3['# Employees'] >= EMP_MIN) & (df3['# Employees'] <= EMP_MAX)
                         # Score Title
                         TITLE=LEADS_DB[LEADS_DB['MAIL'].isin(df_client['EMAIL'])][['TITLE']].drop_duplicates().reset_index(drop=True)
