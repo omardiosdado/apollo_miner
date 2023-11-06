@@ -495,6 +495,7 @@ if authentication_status== True:
                     Procesados: {(str(len(df4)))}
                     '''
                     st.code(code, line_numbers=False)
+                    worksheet = gc.open_by_key(spreadsheet_key3).worksheet('CHECK')  # Access the first worksheet
                     worksheet.update('A1', "")
                 if cell_value:
                     st.error(f'Archivo en uso por {name}'.format(cell_value))
