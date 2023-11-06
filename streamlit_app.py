@@ -135,6 +135,7 @@ if authentication_status== True:
                 spreadsheet_key2 = '1oF5ThuOrFfwyEJ6-40_PwqGV9UCzJwLLz1vG9wnZTWg'
                 spreadsheet_key3 = '1g9_Jr0BXMqOcC5w3TKzfo7R1GJWFP-WlCQwIj2aCi2w'
 
+                gc = gspread.authorize(credentials)
                 worksheet = gc.open_by_key(spreadsheet_key3).worksheet('CHECK')  # Access the first worksheet
                 cell_value = (worksheet.acell('A1').value)
                 
