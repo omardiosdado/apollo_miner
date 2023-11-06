@@ -497,7 +497,7 @@ if authentication_status== True:
                     st.code(code, line_numbers=False)
                     worksheet.update('A1', "")
                 if cell_value:
-                    st.error('Archivo en uso'.format(cell_value))
+                    st.error(f'Archivo en uso por {name}'.format(cell_value))
     
                 st.download_button("Download CSV", csv_data, key="download_df.csv", help="Click to download the DataFrame as CSV")
             st.balloons()
