@@ -124,7 +124,7 @@ if authentication_status== True:
                         'Last Contacted', 'Account Owner', 'Email Sent', 
                         'Email Open', 'Email Bounced', 'Replied', 'Demoed', 
                         'Apollo Contact Id', 'Apollo Account Id','Corporate Phone',
-                        'Departments','Home Phone','Last Raised At','Lists',
+                        'Departments','Home Phone','Last Raised At',
                         'Mobile Phone','Number of Retail Locations','Other Phone',
                         'Work Direct Phone', 'Company'], errors='ignore')
         APOLLO_RAW = APOLLO_RAW.rename(columns={'# Employees': 'Employees',
