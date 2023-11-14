@@ -10,4 +10,4 @@ oauth2client
 apify-client
 df2gspread
 gsheetsdb
-google-cloud
+google-cloud-bigquery
