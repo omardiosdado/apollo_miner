@@ -317,8 +317,8 @@ if authentication_status== True:
                             SENIORITY=LEADS_DB[LEADS_DB['Email'].isin(df_client['EMAIL'])][['Seniority']].drop_duplicates().reset_index(drop=True)
                             df3['SCORE_Seniority_'+row[0]]=df3['Seniority'].isin(SENIORITY['Seniority'])
                             # Score industria
-                            INDUSTRY=LEADS_DB[LEADS_DB['Email'].isin(df_client['EMAIL'])][['INDUSTRY']].drop_duplicates().reset_index(drop=True)
-                            df3['SCORE_Industry_'+row[0]]=df3['Industry'].isin(INDUSTRY['INDUSTRY'])
+                            INDUSTRY=LEADS_DB[LEADS_DB['Email'].isin(df_client['EMAIL'])][['Industry']].drop_duplicates().reset_index(drop=True)
+                            df3['SCORE_Industry_'+row[0]]=df3['Industry'].isin(INDUSTRY['Industry'])
                             df3['SCORE_EMP_'+row[0]] = df3['SCORE_EMP_'+row[0]].astype(int)
                             df3['SCORE_TITLE_'+row[0]] = df3['SCORE_TITLE_'+row[0]].astype(int)
                             df3['SCORE_Seniority_'+row[0]] = df3['SCORE_Seniority_'+row[0]].astype(int)
