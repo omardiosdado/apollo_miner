@@ -431,7 +431,7 @@ if authentication_status== True:
                     job_config.schema_update_options = [
                         bigquery.SchemaUpdateOption.ALLOW_FIELD_ADDITION
                     ]
-
+                    df4['USER'] = df4['USER'].astype(str)
                     job = client2.load_table_from_dataframe(df4, table_id, job_config=job_config)
                     job.result()
                
