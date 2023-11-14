@@ -177,12 +177,12 @@ if authentication_status== True:
                     nbar=5+nbar
                     progress_bar.progress(nbar)
 
-                    QUERY = ("SELECT * FROM `matrioshka-404701.matrioshka_leads.master_leads4test` WHERE Status = 'AP';")
+                    QUERY = ("SELECT * FROM `matrioshka-404701.matrioshka_leads.master_leads` WHERE Status = 'AP';")
                     UPLOAD = client2.query(QUERY).to_dataframe()
                     progress_status.caption(f'Cargando LEADS_DB... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
-                    QUERY = ("SELECT * FROM `matrioshka-404701.matrioshka_leads.master_leads4test` WHERE Status = 'LDB';")
+                    QUERY = ("SELECT * FROM `matrioshka-404701.matrioshka_leads.master_leads` WHERE Status = 'LDB';")
                     LEADS_DB= client2.query(QUERY).to_dataframe()
 
                     UPLOAD2 = load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'APOLLO_OUTPUT')
@@ -425,7 +425,7 @@ if authentication_status== True:
                     nbar=5+nbar
                     progress_bar.progress(nbar)
                     # UPLOAD= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'APOLLO_OUTPUT')
-                    table_id = 'matrioshka-404701.matrioshka_leads.master_leads4test'
+                    table_id = 'matrioshka-404701.matrioshka_leads.master_leads'
 
                     job_config = bigquery.LoadJobConfig()
                     job_config.schema_update_options = [
