@@ -81,6 +81,7 @@ if authentication_status== True:
     runButton2= col2.empty()
     uploaded_file = col2.empty()
     APOLLO_CSV = uploaded_file.file_uploader('Carga el .CSV de Apollo:', type=['csv'])
+    csv_data = pd.DataFrame().to_csv(index=False)
     
     if 'click' not in st.session_state:
         st.session_state.click = False
