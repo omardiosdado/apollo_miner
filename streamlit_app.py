@@ -359,13 +359,8 @@ if authentication_status== True:
                     dft['Status']='AP'
                     ##############
                     dft['SCORE_FINAL'].replace('', 'NA', inplace=True)
-                    column = dft.pop('SCORE_FINAL')
-                    dft.insert(0, column.name, column)
-                    column = dft.pop('CHECK_SCORE')
-                    dft.insert(0, column.name, column)
                     dft['USER']=name_user
-                    column = dft.pop('USER')
-                    dft.insert(0, column.name, column)                
+                    dft['USER'] = dft['USER'].astype(str)
                     progress_status.caption(f'Scrapeando linkedin... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
