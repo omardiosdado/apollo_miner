@@ -242,7 +242,7 @@ if authentication_status== True:
                     else:
                         df0 = APOLLO_RAW
                         FILTRO_REPETIDO_sheets=len(APOLLO_RAW)-len(df0)
-                    df = df0[~df0['Email'].isin(LEADS_DB['MAIL'])]
+                    df = df0[~df0['Email'].isin(LEADS_DB['Email'])]
                     df.loc[:, 'DOMAIN_CHECK'] = df['Email'].str.split('@').str[1]
                     FILTRO_REPETIDO=len(APOLLO_RAW)-len(df)
                     #QUITAMOS VACIOS
