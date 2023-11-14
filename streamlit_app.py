@@ -1,10 +1,7 @@
 import pandas as pd
 import numpy as np
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
-from df2gspread import gspread2df as g2d
 import re
-from apify_client import ApifyClient
 import streamlit as st
 import streamlit_authenticator as stauth
 import requests
@@ -14,11 +11,11 @@ import random
 from google.oauth2.service_account import Credentials
 import yaml
 from yaml.loader import SafeLoader
+from google.cloud import bigquery
 
-
-favicon = 'https://polimata.ai/wp-content/uploads/2023/07/favicon-32x32-1.png'
+favicon = 'https://matrioshka.com.mx/wp-content/uploads/2020/01/cropped-favicon-32x32.png'
 st.set_page_config(
-    page_title="Polímata.AI",
+    page_title="Matrioshka",
     page_icon=favicon,
     initial_sidebar_state="expanded"
 )
@@ -32,8 +29,8 @@ hide_default_format = """
 st.markdown(hide_default_format, unsafe_allow_html=True)
 
 # st.image("https://i.imgur.com/XQ0ePg2.png", use_column_width='auto')
-st.title(':factory: Procesador de Leads')
-st.caption(':turtle: V1.01 by Polímata.AI')
+st.title(':nesting_dolls: Procesador de Leads')
+st.caption(':turtle: V2.01 by Polímata.AI')
 
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
@@ -59,18 +56,23 @@ if authentication_status== True:
     col1.subheader('Elige el output de descargas de Apollo')
     st.divider()
     
-    
-    scopes = [
-        "https://www.googleapis.com/auth/spreadsheets",
-    ]
-    
+    #Sheets
     skey = st.secrets["gcp_service_account"]
     credentials = Credentials.from_service_account_info(
         skey,
-        scopes=scopes,
+        scopes = ["https://www.googleapis.com/auth/spreadsheets"],
     )
     client = gspread.authorize(credentials)
     
+    #BigQuery
+    skey2 = st.secrets["gcp_service_account2"]
+    credentials2 = Credentials.from_service_account_info(
+        skey2,
+        scopes=["https://www.googleapis.com/auth/cloud-platform"],
+    )
+    client2 = bigquery.Client(credentials=credentials2, project=credentials2.project_id)
+
+
     def load_data(url, sheet_name):
         sh = client.open_by_url(url)
         df = pd.DataFrame(sh.worksheet(sheet_name).get_all_records())
@@ -94,7 +96,9 @@ if authentication_status== True:
             return None
         return r.json()
     lottie_url_hello = "https://lottie.host/57b82a4f-04ed-47c1-9be6-d9bdf4a4edf0/whycX7qYPw.json"
-    lottie_url_download = "https://lottie.host/57b82a4f-04ed-47c1-9be6-d9bdf4a4edf0/whycX7qYPw.json"
+    #lottie_url_download = "https://lottie.host/57b82a4f-04ed-47c1-9be6-d9bdf4a4edf0/whycX7qYPw.json"
+    lottie_url_download ="https://lottie.host/f3a3d53c-5e90-4d8b-b4e0-acdd22003971/ARjLKWOmyX.json"
+
     lottie_hello = load_lottieurl(lottie_url_hello)
     lottie_download = load_lottieurl(lottie_url_download)
     
@@ -115,6 +119,33 @@ if authentication_status== True:
     if APOLLO_CSV is not None:
     
         APOLLO_RAW = pd.read_csv(APOLLO_CSV, encoding='utf-8')
+        APOLLO_RAW = APOLLO_RAW.drop(columns=[ 'Email Confidence', 'Contact Owner', 'Stage', 
+                        'Last Contacted', 'Account Owner', 'Email Sent', 
+                        'Email Open', 'Email Bounced', 'Replied', 'Demoed', 
+                        'Apollo Contact Id', 'Apollo Account Id','Corporate Phone',
+                        'Departments','Home Phone','Last Raised At','Lists',
+                        'Mobile Phone','Number of Retail Locations','Other Phone',
+                        'Work Direct Phone', 'Company'], errors='ignore')
+        APOLLO_RAW = APOLLO_RAW.rename(columns={'# Employees': 'Employees',
+                                                'Annual Revenue':'Annual_Revenue',
+                                                'Company Address':'Company_Address',
+                                                'Company City':'Company_City',
+                                                'Company Linkedin Url':'Company_Linkedin_Url',
+                                                'Company Name for Emails':'Company',
+                                                'Company Phone':'Company_Phone',
+                                                'Company State':'Company_State',
+                                                'Company Country':'Company_Country',
+                                                'Facebook Url':'Facebook_Url',
+                                                'First Name':'First_Name',
+                                                'First Phone':'First_Phone',
+                                                'Last Name': 'Last_Name',
+                                                'Latest Funding':'Latest_Funding',
+                                                'Latest Funding Amount':'Latest_Funding_Amount',
+                                                'Person Linkedin Url':'Person_Linkedin_Url',
+                                                'SEO Description':'SEO_Description',
+                                                'Total Funding':'Total_Funding',
+                                                'Twitter Url':'Twitter_Url'})
+
         datos.dataframe(APOLLO_RAW)
         runButton.button('Procesar datos',on_click=onClickFunction)
     
@@ -131,9 +162,9 @@ if authentication_status== True:
                 progress_bar.progress(nbar)
                 time.sleep(2)
                 #GOOGLE SHEETS
-                spreadsheet_key1 = '18yIcld6VZXw1MZkE0YFQVTqnpyI03p5_ZGBtWLx0xXw'
-                spreadsheet_key2 = '1oF5ThuOrFfwyEJ6-40_PwqGV9UCzJwLLz1vG9wnZTWg'
-                spreadsheet_key3 = '1g9_Jr0BXMqOcC5w3TKzfo7R1GJWFP-WlCQwIj2aCi2w'
+                spreadsheet_key1 = st.secrets['spreadsheet_key1']
+                spreadsheet_key2 = st.secrets['spreadsheet_key2']
+                spreadsheet_key3 = st.secrets['spreadsheet_key3']
 
                 gc = gspread.authorize(credentials)
                 worksheet = gc.open_by_key(spreadsheet_key3).worksheet('CHECK')  # Access the first worksheet
@@ -144,13 +175,23 @@ if authentication_status== True:
                     progress_status.caption(f'Cargando base actual... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
-                    UPLOAD= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'APOLLO_OUTPUT')
-                    
+
+                    QUERY = ("SELECT * FROM `matrioshka-404701.matrioshka_leads.master_leads4test` WHERE Status = 'AP';")
+                    UPLOAD = client2.query(QUERY).to_dataframe()
                     progress_status.caption(f'Cargando LEADS_DB... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
-                    LEADS_DB= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key1,'LEADS_DB')
+                    QUERY = ("SELECT * FROM `matrioshka-404701.matrioshka_leads.master_leads4test` WHERE Status = 'LDB';")
+                    LEADS_DB= client2.query(QUERY).to_dataframe()
+
+                    UPLOAD2 = load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'APOLLO_OUTPUT')
+                    
+                    # progress_status.caption(f'Cargando LEADS_DB... {emojis[random.randint(0, len(emojis) - 1)]}')
+                    # nbar=5+nbar
+                    # progress_bar.progress(nbar)
+                    # LEADS_DB= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key1,'LEADS_DB')
         
+
                     progress_status.caption(f'Cargando BLACKLIST... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
@@ -176,10 +217,18 @@ if authentication_status== True:
                     progress_status.caption(f'Cargando datos fuente... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
-                    NOMBRES_OK = pd.read_csv('./nombres_ok.csv', encoding='utf-8')
-                    NOMBRES_EXCL = pd.read_csv('./nombres_excl.csv', encoding='utf-8')
-                    COMPANY_EXCL = pd.read_csv('./company_excl.csv', encoding='utf-8')
-                    STATUS_CHECK = pd.read_csv('./status.csv', encoding='utf-8')
+                    QUERY = ('SELECT * FROM `matrioshka-404701.matrioshka_leads.nombres_ok`')
+                    NOMBRES_OK= client2.query(QUERY).to_dataframe()
+                    QUERY = ('SELECT * FROM `matrioshka-404701.matrioshka_leads.nombres_excl`')
+                    NOMBRES_EXCL= client2.query(QUERY).to_dataframe()
+                    QUERY = ('SELECT * FROM `matrioshka-404701.matrioshka_leads.company_excl`')
+                    COMPANY_EXCL= client2.query(QUERY).to_dataframe()
+                    QUERY = ('SELECT * FROM `matrioshka-404701.matrioshka_leads.status`')
+                    STATUS_CHECK= client2.query(QUERY).to_dataframe()
+                    # NOMBRES_OK = pd.read_csv('./nombres_ok.csv', encoding='utf-8')
+                    # NOMBRES_EXCL = pd.read_csv('./nombres_excl.csv', encoding='utf-8')
+                    # COMPANY_EXCL = pd.read_csv('./company_excl.csv', encoding='utf-8')
+                    # STATUS_CHECK = pd.read_csv('./status.csv', encoding='utf-8')
         
                     progress_status.caption(f'Filtrando datos... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
@@ -193,11 +242,10 @@ if authentication_status== True:
                         df0 = APOLLO_RAW
                         FILTRO_REPETIDO_sheets=len(APOLLO_RAW)-len(df0)
                     df = df0[~df0['Email'].isin(LEADS_DB['MAIL'])]
-                    df = df.drop(columns=[ 'Email Confidence', 'Departments', 'Contact Owner','Work Direct Phone', 'Home Phone', 'Mobile Phone', 'Corporate Phone','Other Phone', 'Stage', 'Last Contacted', 'Account Owner', 'Keywords', 'Facebook Url', 'Twitter Url','Annual Revenue', 'Total Funding', 'Latest Funding','Latest Funding Amount', 'Last Raised At', 'Email Sent', 'Email Open', 'Email Bounced', 'Replied', 'Demoed', 'Number of Retail Locations', 'Apollo Contact Id', 'Apollo Account Id'], errors='ignore')
                     df.loc[:, 'DOMAIN_CHECK'] = df['Email'].str.split('@').str[1]
                     FILTRO_REPETIDO=len(APOLLO_RAW)-len(df)
                     #QUITAMOS VACIOS
-                    df1 = df.dropna(subset=['First Name', 'Company Name for Emails', 'Email','Person Linkedin Url','Website'], how='any')
+                    df1 = df.dropna(subset=['First_Name', 'Company', 'Email','Person_Linkedin_Url','Website'], how='any')
                     df1 = df1.reset_index(drop=True)
                     FILTRO_VACIOS=len(df)-len(df1)
                     #QUITAMOS EMAILS NO VERIFICADOS
@@ -212,29 +260,29 @@ if authentication_status== True:
                     progress_bar.progress(nbar)
                     #CHECK NOMBRE
                     df3['CHECK_NAME'] = 0
-                    df3.loc[df3['First Name'].isin(NOMBRES_OK['NAME']), 'CHECK_NAME'] = 1
-                    df3.loc[df3['First Name'].isin(NOMBRES_EXCL['NAME']), 'CHECK_NAME'] = -1
+                    df3.loc[df3['First_Name'].isin(NOMBRES_OK['NAME']), 'CHECK_NAME'] = 1
+                    df3.loc[df3['First_Name'].isin(NOMBRES_EXCL['NAME']), 'CHECK_NAME'] = -1
                     # CHECK EMAIL
                     email_pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
                     def is_valid_email(email):
                         return bool(re.match(email_pattern, email))
                     df3['CHECK_EMAIL'] = df3['Email'].apply(is_valid_email)
                     ending_strings = COMPANY_EXCL['NAME'].tolist()
-                    df3['Company Name for Emails']=df3['Company Name for Emails'].str.replace(r' S\.C$', '', regex=True)
-                    df3['Company Name for Emails']=df3['Company Name for Emails'].str.replace(r' S\.A DE C\.V$', '', regex=True)
-                    df3['Company Name for Emails']=df3['Company Name for Emails'].str.replace(r' S\.A\. de C\.V$', '', regex=True)
-                    df3['Company Name for Emails']=df3['Company Name for Emails'].str.replace(r' SA de CV$', '', regex=True)
-                    df3['Company Name for Emails']=df3['Company Name for Emails'].str.replace(r' S\.A de C\.V$', '', regex=True)
-                    df3['CHECK_COMPANY'] = np.where(df3['Company Name for Emails'].str.endswith(tuple(ending_strings)), 0, 1)
+                    df3['Company']=df3['Company'].str.replace(r' S\.C$', '', regex=True)
+                    df3['Company']=df3['Company'].str.replace(r' S\.A DE C\.V$', '', regex=True)
+                    df3['Company']=df3['Company'].str.replace(r' S\.A\. de C\.V$', '', regex=True)
+                    df3['Company']=df3['Company'].str.replace(r' SA de CV$', '', regex=True)
+                    df3['Company']=df3['Company'].str.replace(r' S\.A de C\.V$', '', regex=True)
+                    df3['CHECK_COMPANY'] = np.where(df3['Company'].str.endswith(tuple(ending_strings)), 0, 1)
                     # MODIFICAR EMPLEADOS A NUMERICO
-                    df3['# Employees'] = pd.to_numeric(df3['# Employees'], errors='coerce')
+                    df3['Employees'] = pd.to_numeric(df3['Employees'], errors='coerce')
         
                     progress_status.caption(f'Validando info de Apollo... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
                     # SCORING
                     # Score country
-                    df3['SCORE_Country']=df3['Company Country']== 'Mexico'
+                    df3['SCORE_Country']=df3['Company_Country']== 'Mexico'
                     df3['SCORE_Country'] = df3['SCORE_Country'].astype(int)
                     df3['CHECK_EMAIL'] = df3['CHECK_EMAIL'].astype(int)
                     df3['CHECK_SCORE'] = df3[['CHECK_NAME','CHECK_EMAIL', 'CHECK_COMPANY','SCORE_Country']].sum(axis=1)/4
@@ -247,11 +295,11 @@ if authentication_status== True:
                         df_client = df_client[['EMAIL']]
                         if len(df_client)>0:
                             # Score EMPLEADOS
-                            EMPLOYEES=LEADS_DB[LEADS_DB['MAIL'].isin(df_client['EMAIL'])][['EMPLOYEES']].drop_duplicates().reset_index(drop=True)
-                            EMPLOYEES['EMPLOYEES'] = pd.to_numeric(EMPLOYEES['EMPLOYEES'], errors='coerce')
+                            EMPLOYEES=LEADS_DB[LEADS_DB['Email'].isin(df_client['EMAIL'])][['Employees']].drop_duplicates().reset_index(drop=True)
+                            EMPLOYEES['Employees'] = pd.to_numeric(EMPLOYEES['Employees'], errors='coerce')
                             if not EMPLOYEES.dropna().empty:
-                                EMP_MIN = min(EMPLOYEES.dropna()['EMPLOYEES'])
-                                EMP_MAX = max(EMPLOYEES.dropna()['EMPLOYEES'])
+                                EMP_MIN = min(EMPLOYEES.dropna()['Employees'])
+                                EMP_MAX = max(EMPLOYEES.dropna()['Employees'])
                             else:
                                 # Handle the case when EMPLOYEES is empty
                                 EMP_MIN = None  # or some default value
@@ -260,15 +308,15 @@ if authentication_status== True:
                             
                             # EMP_MIN=(min(EMPLOYEES.dropna()['EMPLOYEES']))
                             # EMP_MAX=(max(EMPLOYEES.dropna()['EMPLOYEES']))    
-                            df3['SCORE_EMP_'+row[0]] = (df3['# Employees'] >= EMP_MIN) & (df3['# Employees'] <= EMP_MAX)
+                            df3['SCORE_EMP_'+row[0]] = (df3['Employees'] >= EMP_MIN) & (df3['Employees'] <= EMP_MAX)
                             # Score Title
-                            TITLE=LEADS_DB[LEADS_DB['MAIL'].isin(df_client['EMAIL'])][['TITLE']].drop_duplicates().reset_index(drop=True)
-                            df3['SCORE_TITLE_'+row[0]]=df3['Title'].isin(TITLE['TITLE'])
+                            TITLE=LEADS_DB[LEADS_DB['Email'].isin(df_client['EMAIL'])][['Title']].drop_duplicates().reset_index(drop=True)
+                            df3['SCORE_TITLE_'+row[0]]=df3['Title'].isin(TITLE['Title'])
                             # Score seniority
-                            SENIORITY=LEADS_DB[LEADS_DB['MAIL'].isin(df_client['EMAIL'])][['Seniority']].drop_duplicates().reset_index(drop=True)
+                            SENIORITY=LEADS_DB[LEADS_DB['Email'].isin(df_client['EMAIL'])][['Seniority']].drop_duplicates().reset_index(drop=True)
                             df3['SCORE_Seniority_'+row[0]]=df3['Seniority'].isin(SENIORITY['Seniority'])
                             # Score industria
-                            INDUSTRY=LEADS_DB[LEADS_DB['MAIL'].isin(df_client['EMAIL'])][['INDUSTRY']].drop_duplicates().reset_index(drop=True)
+                            INDUSTRY=LEADS_DB[LEADS_DB['Email'].isin(df_client['EMAIL'])][['INDUSTRY']].drop_duplicates().reset_index(drop=True)
                             df3['SCORE_Industry_'+row[0]]=df3['Industry'].isin(INDUSTRY['INDUSTRY'])
                             df3['SCORE_EMP_'+row[0]] = df3['SCORE_EMP_'+row[0]].astype(int)
                             df3['SCORE_TITLE_'+row[0]] = df3['SCORE_TITLE_'+row[0]].astype(int)
@@ -306,10 +354,8 @@ if authentication_status== True:
                     column = dft.pop('BL_FINAL')
                     dft.insert(0, column.name, column)
                     dft.pop('Email Status')
-                    dft.pop('Company')
-                    dft['Country']=dft['Country']+'_'+dft['Company Country']
-                    dft.pop('Company Country')
-                    dft['DEPURAR']='NA'
+                    dft['Country_Country']=dft['Country']+'_'+dft['Company_Country']
+                    dft['Status']='AP'
                     ##############
                     dft['SCORE_FINAL'].replace('', 'NA', inplace=True)
                     column = dft.pop('SCORE_FINAL')
@@ -322,61 +368,17 @@ if authentication_status== True:
                     progress_status.caption(f'Scrapeando linkedin... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
-        
+                    for index, row in CLIENTS.iterrows():
+                        clientx = row['CLIENT']
+                        dft.drop(columns=[ 
+                            'BLACKLIST_' + clientx, 
+                            'SCORE_' + clientx, 
+                            'SCORE_EMP_' + clientx,
+                            'SCORE_Industry_' + clientx, 
+                            'SCORE_Seniority_' + clientx, 
+                            'SCORE_TITLE_' + clientx
+                        ], inplace=True, errors='ignore')      
                     df4=dft
-                    # APIFY_API_TOKEN=st.secrets['APIFY_API_TOKEN']
-                    # def linkedin_scraper(url_test):
-                    #     crawl_input = {"url": url_test}
-                    #     apify_client = ApifyClient(APIFY_API_TOKEN)
-                    #     actor_call = apify_client.actor('lordflotrox/linkedin-profile').call(run_input=crawl_input)
-                    #     x=[]
-                    #     if actor_call['status']=='SUCCEEDED':
-                    #         for item in apify_client.dataset(actor_call["defaultDatasetId"]).iterate_items():
-                    #             try:
-                    #                 try:
-                    #                     x.append(item['data']['@graph'][0]['address']['addressCountry']+'|'+item['data']['@graph'][0]['address']['addressLocality'])
-                    #                 except:
-                    #                     x.append("NA")
-                    #                 try:
-                    #                     x.append(item['data']['@graph'][0]['description'])
-                    #                 except:
-                    #                     x.append("NA")
-                    #                 try:
-                    #                     x.append(item['data']['@graph'][0]['interactionStatistic']['userInteractionCount'])
-                    #                 except:
-                    #                     x.append("NA")
-                    #                 z=[]
-                    #                 for i in item['data']['@graph'][0]['worksFor']:
-                    #                     y=[]
-                    #                     try:
-                    #                         y.append(i['name'])
-                    #                     except:
-                    #                         y.append("NA")
-                    #                     try:
-                    #                         y.append(i['member']['description'])
-                    #                     except:
-                    #                         y.append("NA")
-                    #                     try:
-                    #                         y.append(i['member']['startDate'])
-                    #                     except:
-                    #                         y.append("NA")
-                    #                     z.append(y)
-                    #                 x.append(z)
-                    #             except:
-                    #                 x=[]
-                    #     return x
-                    # for index, row in df4.iterrows():
-                    #     x=linkedin_scraper(row['Person Linkedin Url'])
-                    #     if len(x)>0:
-                    #         df4.loc[index, 'LKN_LOC']=x[0]
-                    #         df4.loc[index, 'LKN_DESC']=x[1]
-                    #         df4.loc[index, 'LKN_Follower']=x[2]
-                    #         n=0
-                    #         for i in x[3]:
-                    #             n=n+1
-                    #             df4.loc[index, ('LKN_COMP_'+ str(n))]=i[0]
-                    #             df4.loc[index, ('LKN_COMP_DESC_'+ str(n))]=i[1]
-                    #             df4.loc[index, ('LKN_COMP_START_'+ str(n))]=i[2]
                     
                     progress_status.caption('Guardando archivo... :yarn:')    
                     nbar=5+nbar
@@ -386,32 +388,30 @@ if authentication_status== True:
                     csv_data = df4.to_csv(index=False)
                    
         
-                    progress_status.caption(f'Formateando sheets... {emojis[random.randint(0, len(emojis) - 1)]}')
+                    progress_status.caption(f'Formateando... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
         
                     df5 = df4
+
+
+                    df4 = df4[~df4['Email'].isin(UPLOAD2['Email'])]
+                    UPLOAD2 = UPLOAD2[~UPLOAD2['Email'].isin(LEADS_DB['Email'])]
+
                     gc = gspread.authorize(credentials)
-        
                     worksheet = gc.open_by_key(spreadsheet_key3)
                     target_sheet = worksheet.worksheet('APOLLO_OUTPUT')
-                    df6 = pd.DataFrame(columns=UPLOAD.columns)
+                    df6 = pd.DataFrame(columns=UPLOAD2.columns)
                     
         
                     for index, row in df5.iterrows():
                         df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
-                        # # Check if the row from df2 is not in df
-                        # if len(UPLOAD) == 0:
-                        #     df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
-                        # if not UPLOAD[(UPLOAD['Email'] == row['Email'])].any().any() and len(UPLOAD) != 0:
-                        #     # If the row is not in df, append it to df3
-                        #     # df6 = df6.append(row, ignore_index=True)
-                            # df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
-                    df_combined = pd.concat([UPLOAD, df6], ignore_index=True)
+
+                    df_combined = pd.concat([UPLOAD2, df6], ignore_index=True)
                     target_sheet.clear()
                     df_combined=df_combined.astype(str)
                     data_to_import = [df_combined.columns.tolist()] + df_combined.values.tolist()
-                    # target_sheet.insert_rows(data_to_import, 1)
+
         
                     num_rowsx= len(data_to_import)
                     num_columnsx = len(data_to_import[0])
@@ -425,58 +425,20 @@ if authentication_status== True:
                     range_to_updatex = f'A1:{ending_column_label}{num_rowsx}'
                     target_sheet.update(range_to_updatex, data_to_import)
                     
-                    progress_status.caption(f'Cargando a sheets... {emojis[random.randint(0, len(emojis) - 1)]}')
+                    progress_status.caption(f'Cargando base... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
-                    UPLOAD= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'APOLLO_OUTPUT')
-        
-                    # name_col=(UPLOAD.columns.get_loc('First Name')+1)
-                    # name_check_col=(UPLOAD.columns.get_loc('CHECK_NAME'))
-                    # Email_col=(UPLOAD.columns.get_loc('Email')+1)
-                    # Email_check_col=(UPLOAD.columns.get_loc('CHECK_EMAIL'))
-                    # Company_col=(UPLOAD.columns.get_loc('Company')+1)
-                    # Company_check_col=(UPLOAD.columns.get_loc('CHECK_COMPANY'))
-                    # Country_col=(UPLOAD.columns.get_loc('Country')+1)
-                    # Country_check_col=(UPLOAD.columns.get_loc('SCORE_Country'))
-        
-                    # format_good={
-                    #     "backgroundColor": {
-                    #     "red": 0.5,
-                    #     "green": 0.9,
-                    #     "blue": 0.5,
-                    #     'alpha':0
-                    #     }
-                    # }
-                    # format_reg={
-                    #     "backgroundColor": {
-                    #     "red": 1,
-                    #     "green": .89,
-                    #     "blue": .6,
-                    #     'alpha':0
-                    #     }
-                    # }
-                    # format_bad={
-                    #     "backgroundColor": {
-                    #     "red": 0.9,
-                    #     "green": 0.5,
-                    #     "blue": 0.5,
-                    #     'alpha':0
-                    #     }
-                    # }
-                    # format_zero={
-                    #     "backgroundColor": {
-                    #     "red": 1.0,
-                    #     "green": 1.0,
-                    #     "blue": 1.0,
-                    #     'alpha':0
-                    #     }
-                    # }
-        
-                    # target_sheet.format(chr(64 + name_col)+':'+chr(64 + name_col),format_zero)
-                    # target_sheet.format(chr(64 + Email_col)+':'+chr(64 + Email_col),format_zero)
-                    # target_sheet.format(chr(64 + Company_col)+':'+chr(64 + Company_col),format_zero)
-                    # target_sheet.format(chr(64 + Country_col)+':'+chr(64 + Country_col),format_zero)
-        
+                    # UPLOAD= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'APOLLO_OUTPUT')
+                    table_id = 'matrioshka-404701.matrioshka_leads.master_leads4test'
+
+                    job_config = bigquery.LoadJobConfig()
+                    job_config.schema_update_options = [
+                        bigquery.SchemaUpdateOption.ALLOW_FIELD_ADDITION
+                    ]
+
+                    job = client2.load_table_from_dataframe(df4, table_id, job_config=job_config)
+                    job.result()
+               
                     datos.dataframe(df6)
                     LIMPIOS_TOT=(str(len(APOLLO_RAW)-len(df4)))
                     st.session_state.click = False
