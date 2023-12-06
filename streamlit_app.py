@@ -396,7 +396,9 @@ if authentication_status== True:
 
 
                     df4 = df4[~df4['Email'].isin(UPLOAD2['Email'])]
-                    UPLOAD2 = UPLOAD2[~UPLOAD2['Email'].isin(LEADS_DB['Email'])]
+                    # UPLOAD2 = UPLOAD2[~UPLOAD2['Email'].isin(LEADS_DB['Email'])]
+
+                    UPLOAD2 = UPLOAD2
 
                     gc = gspread.authorize(credentials)
                     worksheet = gc.open_by_key(spreadsheet_key3)
