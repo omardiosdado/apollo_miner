@@ -236,15 +236,19 @@ if authentication_status== True:
                     progress_bar.progress(nbar)
                     # QUITAMOS REPETIDOS
         
-                    if len(UPLOAD) is not 0:
-                        df0 = APOLLO_RAW[~APOLLO_RAW['Email'].isin(UPLOAD['Email'])]
-                        FILTRO_REPETIDO_sheets=len(APOLLO_RAW)-len(df0)
-                    else:
-                        df0 = APOLLO_RAW
-                        FILTRO_REPETIDO_sheets=len(APOLLO_RAW)-len(df0)
-                    df = df0[~df0['Email'].isin(LEADS_DB['Email'])]
-                    df.loc[:, 'DOMAIN_CHECK'] = df['Email'].str.split('@').str[1]
-                    FILTRO_REPETIDO=len(APOLLO_RAW)-len(df)
+                    # if len(UPLOAD) is not 0:
+                    #     df0 = APOLLO_RAW[~APOLLO_RAW['Email'].isin(UPLOAD['Email'])]
+                    #     FILTRO_REPETIDO_sheets=len(APOLLO_RAW)-len(df0)
+                    # else:
+                    #     df0 = APOLLO_RAW
+                    #     FILTRO_REPETIDO_sheets=len(APOLLO_RAW)-len(df0)
+                    # df = df0[~df0['Email'].isin(LEADS_DB['Email'])]
+                    # df.loc[:, 'DOMAIN_CHECK'] = df['Email'].str.split('@').str[1]
+                    # FILTRO_REPETIDO=len(APOLLO_RAW)-len(df)
+                    df = APOLLO_RAW
+                    FILTRO_REPETIDO=0
+
+                    
                     #QUITAMOS VACIOS
                     df1 = df.dropna(subset=['First_Name', 'Company', 'Email','Person_Linkedin_Url','Website'], how='any')
                     df1 = df1.reset_index(drop=True)
