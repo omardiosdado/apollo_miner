@@ -246,6 +246,7 @@ if authentication_status== True:
                     # df.loc[:, 'DOMAIN_CHECK'] = df['Email'].str.split('@').str[1]
                     # FILTRO_REPETIDO=len(APOLLO_RAW)-len(df)
                     df = APOLLO_RAW
+                    df.loc[:, 'DOMAIN_CHECK'] = df['Email'].str.split('@').str[1]
                     FILTRO_REPETIDO=0
 
                     
