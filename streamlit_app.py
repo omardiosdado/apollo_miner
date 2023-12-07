@@ -248,6 +248,8 @@ if authentication_status== True:
                     df = APOLLO_RAW
                     df.loc[:, 'DOMAIN_CHECK'] = df['Email'].str.split('@').str[1]
                     FILTRO_REPETIDO=0
+                    FILTRO_REPETIDO_sheets=0
+                    
 
                     
                     #QUITAMOS VACIOS
