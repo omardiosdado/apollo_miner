@@ -42,9 +42,6 @@ authenticator = stauth.Authenticate(
     config['preauthorized']
 )
 #name, authentication_status, username = authenticator.login('Login', 'sidebar')
-#name, authentication_status, username = authenticator.login(location='sidebar', fields=['username', 'password'])
-#name, authentication_status, username = authenticator.login(title='Login', fields=['username', 'password'], location='sidebar')
-# name, authentication_status, username = authenticator.login('Login', fields=['username', 'password'], location='sidebar')
 name, authentication_status, username = authenticator.login(fields=['username', 'password'], location='sidebar')
 
 if authentication_status == False:
