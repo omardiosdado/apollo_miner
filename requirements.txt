@@ -1,7 +1,7 @@
 streamlit==1.29.0
 pyyaml
 streamlit-lottie
-streamlit-authenticator
+streamlit-authenticator==0.2.2
 requests
 pandas
 numpy
