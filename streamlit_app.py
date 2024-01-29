@@ -174,8 +174,8 @@ if authentication_status== True:
                 # cell_value = (worksheet.acell('A1').value)
                 cell_value = worksheet.acell('A1').value
                 
-                # if not cell_value:
-                if cell_value is None:
+                # if cell_value is None:
+                if cell_value is None or cell_value == "None":
                     print("Cell A1 is empty or has a value that evaluates to False")
                     # worksheet.update('A1', name_user)
                     worksheet.update('A1', [[name_user]])
@@ -471,9 +471,9 @@ if authentication_status== True:
                     worksheet = gc.open_by_key(spreadsheet_key3).worksheet('CHECK')  # Access the first worksheet
                     worksheet.update('A1', [[""]])
                 # if cell_value:
-                if cell_value is not None:
+                else:
                     # st.error(f'Archivo en uso por {name}'.format(cell_value))
-                    st.error(f'Archivo en uso por {cell_value} {type(cell_value)}')
+                    st.error(f'Archivo en uso por {cell_value}')
     
                 st.download_button("Download CSV", csv_data, key="download_df.csv", help="Click to download the DataFrame as CSV")
             st.balloons()
