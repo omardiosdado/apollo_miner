@@ -170,6 +170,7 @@ if authentication_status== True:
 
                 gc = gspread.authorize(credentials)
                 worksheet = gc.open_by_key(spreadsheet_key3).worksheet('CHECK')  # Access the first worksheet
+                cell_value = None
                 # cell_value = (worksheet.acell('A1').value)
                 
                 if not cell_value:
