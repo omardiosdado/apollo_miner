@@ -174,7 +174,8 @@ if authentication_status== True:
                 # cell_value = (worksheet.acell('A1').value)
                 
                 if not cell_value:
-                    worksheet.update('A1', name_user)
+                    # worksheet.update('A1', name_user)
+                    worksheet.update('A1', "test")
                     progress_status.caption(f'Cargando base actual... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
