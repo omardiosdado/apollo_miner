@@ -473,7 +473,7 @@ if authentication_status== True:
                 # if cell_value:
                 if cell_value is not None:
                     # st.error(f'Archivo en uso por {name}'.format(cell_value))
-                    st.error(f'Archivo en uso por {cell_value}')
+                    st.error(f'Archivo en uso por {cell_value} {type(cell_value)}')
     
                 st.download_button("Download CSV", csv_data, key="download_df.csv", help="Click to download the DataFrame as CSV")
             st.balloons()
