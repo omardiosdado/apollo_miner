@@ -171,7 +171,8 @@ if authentication_status== True:
                 gc = gspread.authorize(credentials)
                 worksheet = gc.open_by_key(spreadsheet_key3).worksheet('CHECK')  # Access the first worksheet
                 # cell_value = None
-                cell_value = (worksheet.acell('A1').value)
+                # cell_value = (worksheet.acell('A1').value)
+                cell_value = worksheet.acell('A1').value
                 
                 if not cell_value:
                     # worksheet.update('A1', name_user)
@@ -468,7 +469,8 @@ if authentication_status== True:
                     worksheet = gc.open_by_key(spreadsheet_key3).worksheet('CHECK')  # Access the first worksheet
                     worksheet.update('A1', [[""]])
                 if cell_value:
-                    st.error(f'Archivo en uso por {name}'.format(cell_value))
+                    # st.error(f'Archivo en uso por {name}'.format(cell_value))
+                    st.error(f'Archivo en uso por {cell_value}')
     
                 st.download_button("Download CSV", csv_data, key="download_df.csv", help="Click to download the DataFrame as CSV")
             st.balloons()
