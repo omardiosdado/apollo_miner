@@ -170,12 +170,12 @@ if authentication_status== True:
 
                 gc = gspread.authorize(credentials)
                 worksheet = gc.open_by_key(spreadsheet_key3).worksheet('CHECK')  # Access the first worksheet
-                cell_value = None
-                # cell_value = (worksheet.acell('A1').value)
+                # cell_value = None
+                cell_value = (worksheet.acell('A1').value)
                 
                 if not cell_value:
                     # worksheet.update('A1', name_user)
-                    worksheet.update('A1', [["test"]])
+                    worksheet.update('A1', [[name_user]])
                     progress_status.caption(f'Cargando base actual... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
