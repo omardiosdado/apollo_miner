@@ -173,8 +173,9 @@ if authentication_status== True:
                 # cell_value = None
                 # cell_value = (worksheet.acell('A1').value)
                 cell_value = worksheet.acell('A1').value
-                
+                print(cell_value)
                 if not cell_value:
+                    print("Cell A1 is empty or has a value that evaluates to False")
                     # worksheet.update('A1', name_user)
                     worksheet.update('A1', [[name_user]])
                     progress_status.caption(f'Cargando base actual... {emojis[random.randint(0, len(emojis) - 1)]}')
