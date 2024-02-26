@@ -12,6 +12,8 @@ from google.oauth2.service_account import Credentials
 import yaml
 from yaml.loader import SafeLoader
 from google.cloud import bigquery
+from datetime import datetime, timedelta
+from pandas import to_datetime
 
 favicon = 'https://matrioshka.com.mx/wp-content/uploads/2020/01/cropped-favicon-32x32.png'
 st.set_page_config(
@@ -30,7 +32,7 @@ st.markdown(hide_default_format, unsafe_allow_html=True)
 
 # st.image("https://i.imgur.com/XQ0ePg2.png", use_column_width='auto') test
 st.title(':nesting_dolls: Procesador de Leads')
-st.caption(':turtle: V2.01 by Polímata.AI')
+st.caption(':turtle: V2.02 by Polímata.AI')
 
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
@@ -147,7 +149,19 @@ if authentication_status== True:
                                                 'SEO Description':'SEO_Description',
                                                 'Total Funding':'Total_Funding',
                                                 'Twitter Url':'Twitter_Url'})
+        columns_to_keep = [
+        'First_Name', 'Last_Name', 'Title', 'Company', 'Email', 'Email Status',
+        'Seniority', 'First_Phone', 'Employees', 'Industry', 'Keywords',
+        'Person_Linkedin_Url', 'Website', 'Company_Linkedin_Url',
+        'Facebook_Url', 'Twitter_Url', 'City', 'State', 'Country',
+        'Company_Address', 'Company_City', 'Company_State', 'Company_Country',
+        'Company_Phone', 'SEO_Description', 'Technologies', 'Annual_Revenue',
+        'Total_Funding', 'Latest_Funding', 'Latest_Funding_Amount'
+        ]
 
+        # Create a new DataFrame with only the specified columns
+        APOLLO_RAW = APOLLO_RAW.filter(items=columns_to_keep)
+        
         datos.dataframe(APOLLO_RAW)
         runButton.button('Procesar datos',on_click=onClickFunction)
     
@@ -232,10 +246,14 @@ if authentication_status== True:
                     COMPANY_EXCL= client2.query(QUERY).to_dataframe()
                     QUERY = ('SELECT * FROM `matrioshka-404701.matrioshka_leads.status`')
                     STATUS_CHECK= client2.query(QUERY).to_dataframe()
-                    # NOMBRES_OK = pd.read_csv('./nombres_ok.csv', encoding='utf-8')
-                    # NOMBRES_EXCL = pd.read_csv('./nombres_excl.csv', encoding='utf-8')
-                    # COMPANY_EXCL = pd.read_csv('./company_excl.csv', encoding='utf-8')
-                    # STATUS_CHECK = pd.read_csv('./status.csv', encoding='utf-8')
+                    MAIL_STATUS = client2.query("SELECT * FROM `matrioshka-404701.matrioshka_leads.MAIL_STATUS`;").to_dataframe()
+                    MAIL_STATUS['verified_on'] = to_datetime(MAIL_STATUS['verified_on'])
+                    four_months_ago = datetime.now() - timedelta(days=120)
+                    MAIL_STATUS['more_than_4_months'] = MAIL_STATUS['verified_on'] < four_months_ago
+                    MAIL_STATUS['verified_on'] = MAIL_STATUS['verified_on'].dt.strftime('%Y-%m-%d')
+                    UNSAFE = MAIL_STATUS[MAIL_STATUS['safe_to_send'] == 'no']
+                    
+
         
                     progress_status.caption(f'Filtrando datos... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
@@ -263,7 +281,9 @@ if authentication_status== True:
                     df1 = df1.reset_index(drop=True)
                     FILTRO_VACIOS=len(df)-len(df1)
                     #QUITAMOS EMAILS NO VERIFICADOS
-                    df2 = df1[df1['Email Status'] == 'Verified']
+                    df2 = df1[~df1['Email'].isin(UNSAFE['MAIL'])]
+                    # df2 = df1[df1['Email Status'] == 'Verified']
+                    df2 = df1
                     FILTRO_EMAIL=len(df1)-len(df2)
                     #QUITAMOS COUNTRY <> MEX
                     df3=df2
