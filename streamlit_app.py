@@ -163,6 +163,7 @@ if authentication_status== True:
         APOLLO_RAW = APOLLO_RAW.filter(items=columns_to_keep)
         
         datos.dataframe(APOLLO_RAW)
+        COUNT_LEADS_CARGA = len(APOLLO_RAW)
         runButton.button('Procesar datos',on_click=onClickFunction)
     
         if st.session_state.click:
@@ -272,7 +273,7 @@ if authentication_status== True:
                     df = APOLLO_RAW
                     df.loc[:, 'DOMAIN_CHECK'] = df['Email'].str.split('@').str[1]
                     FILTRO_REPETIDO=0
-                    FILTRO_REPETIDO_sheets=0
+                    # FILTRO_REPETIDO_sheets=0
                     
 
                     
@@ -283,7 +284,7 @@ if authentication_status== True:
                     #QUITAMOS EMAILS NO VERIFICADOS
                     df2 = df1[~df1['Email'].isin(UNSAFE['MAIL'])]
                     # df2 = df1[df1['Email Status'] == 'Verified']
-                    df2 = df1
+                    # df2 = df1
                     FILTRO_EMAIL=len(df1)-len(df2)
                     #QUITAMOS COUNTRY <> MEX
                     df3=df2
@@ -433,7 +434,6 @@ if authentication_status== True:
                     worksheet = gc.open_by_key(spreadsheet_key3)
                     target_sheet = worksheet.worksheet('APOLLO_OUTPUT')
                     df6 = pd.DataFrame(columns=UPLOAD2.columns)
-                    
         
                     for index, row in df5.iterrows():
                         df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
@@ -471,7 +471,8 @@ if authentication_status== True:
                     job.result()
                
                     datos.dataframe(df6)
-                    LIMPIOS_TOT=(str(len(APOLLO_RAW)-len(df4)))
+                    LIMPIOS_TOT=(str(COUNT_LEADS_CARGA-len(df6)))
+                    FILTRO_REPETIDO_sheets=(str(len(df4)-len(df6)))
                     st.session_state.click = False
                     progress_bar.progress(100)
                     progress_status.caption('Archivo cargado a sheets :plunger:')   
@@ -485,7 +486,7 @@ if authentication_status== True:
                      -> Leads con campos importantes vacios: {FILTRO_EMAIL}
                      -> Leads con País no válido: {FILTRO_CONTRY}
                     Leads NO procesados totales: {LIMPIOS_TOT}
-                    Procesados: {(str(len(df4)))}
+                    Procesados: {(str(len(df6)))}
                     '''
                     st.code(code, line_numbers=False)
                     worksheet = gc.open_by_key(spreadsheet_key3).worksheet('CHECK')  # Access the first worksheet
