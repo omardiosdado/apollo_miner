@@ -12,3 +12,4 @@ df2gspread
 gsheetsdb
 google-cloud-bigquery
 db-dtypes
+datetime
