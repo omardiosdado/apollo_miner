@@ -472,7 +472,7 @@ if authentication_status== True:
                
                     datos.dataframe(df6)
                     LIMPIOS_TOT=(str(COUNT_LEADS_CARGA-len(df6)))
-                    FILTRO_REPETIDO_sheets=(str(len(df4)-len(df6)))
+                    FILTRO_REPETIDO_sheets=(str(len(df6)-len(df4)))
                     st.session_state.click = False
                     progress_bar.progress(100)
                     progress_status.caption('Archivo cargado a sheets :plunger:')   
