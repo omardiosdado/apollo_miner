@@ -448,7 +448,7 @@ if authentication_status== True:
                     needed_rows = next_row + len(data_to_add) - 1
                     if needed_rows > target_sheet.row_count:
                         target_sheet.add_rows(needed_rows - target_sheet.row_count)
-                    range_to_write = f'A{next_row}:E{next_row + len(data_to_add) - 1}'
+                    range_to_write = f'A{next_row}:AT{next_row + len(data_to_add) - 1}'
                     target_sheet.update(range_to_write, data_to_add)
                     #  NUEVO PROCESO /////////////////////////////////////
 
