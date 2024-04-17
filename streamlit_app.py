@@ -441,7 +441,7 @@ if authentication_status== True:
                     #  NUEVO PROCESO /////////////////////////////////////
                     df_combined = df6
                     df_combined=df_combined.astype(str)
-                    data_to_import = [df_combined.columns.tolist()] + df_combined.values.tolist()
+                    data_to_import = df_combined.values.tolist()
                     data_to_add = data_to_import
                     total_rows = len(target_sheet.get_all_values())
                     next_row = total_rows + 1
