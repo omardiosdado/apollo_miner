@@ -434,27 +434,39 @@ if authentication_status== True:
                     worksheet = gc.open_by_key(spreadsheet_key3)
                     target_sheet = worksheet.worksheet('APOLLO_OUTPUT')
                     df6 = pd.DataFrame(columns=UPLOAD2.columns)
-        
+
                     for index, row in df5.iterrows():
                         df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
 
-                    df_combined = pd.concat([UPLOAD2, df6], ignore_index=True)
-                    target_sheet.clear()
+                    #  NUEVO PROCESO /////////////////////////////////////
+                    df_combined = df6
                     df_combined=df_combined.astype(str)
                     data_to_import = [df_combined.columns.tolist()] + df_combined.values.tolist()
+                    data_to_add = data_to_import
+                    total_rows = len(target_sheet.get_all_values())
+                    next_row = total_rows + 1
+                    needed_rows = next_row + len(data_to_add) - 1
+                    if needed_rows > target_sheet.row_count:
+                        target_sheet.add_rows(needed_rows - target_sheet.row_count)
+                    range_to_write = f'A{next_row}:E{next_row + len(data_to_add) - 1}'
+                    target_sheet.update(range_to_write, data_to_add)
+                    #  NUEVO PROCESO /////////////////////////////////////
 
-        
-                    num_rowsx= len(data_to_import)
-                    num_columnsx = len(data_to_import[0])
-                    def get_column_label(column_index):
-                        label = ""
-                        while column_index > 0:
-                            column_index, remainder = divmod(column_index - 1, 26)
-                            label = chr(65 + remainder) + label
-                        return label
-                    ending_column_label = get_column_label(num_columnsx)
-                    range_to_updatex = f'A1:{ending_column_label}{num_rowsx}'
-                    target_sheet.update(range_to_updatex, data_to_import)
+                    # df_combined = pd.concat([UPLOAD2, df6], ignore_index=True)
+                    # target_sheet.clear()
+                    # df_combined=df_combined.astype(str)
+                    # data_to_import = [df_combined.columns.tolist()] + df_combined.values.tolist()
+                    # num_rowsx= len(data_to_import)
+                    # num_columnsx = len(data_to_import[0])
+                    # def get_column_label(column_index):
+                    #     label = ""
+                    #     while column_index > 0:
+                    #         column_index, remainder = divmod(column_index - 1, 26)
+                    #         label = chr(65 + remainder) + label
+                    #     return label
+                    # ending_column_label = get_column_label(num_columnsx)
+                    # range_to_updatex = f'A1:{ending_column_label}{num_rowsx}'
+                    # target_sheet.update(range_to_updatex, data_to_import)
                     
                     progress_status.caption(f'Cargando base... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
