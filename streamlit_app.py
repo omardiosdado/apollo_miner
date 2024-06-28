@@ -517,6 +517,8 @@ if authentication_status== True:
                     target_sheet.sort((2, 'des'), range=data_range)
                     unsafe_vect=UNSAFE[['MAIL']]
                     CARGA_LEADS = pd.DataFrame(target_sheet.get_all_records())
+                    duplicates = CARGA_LEADS.duplicated(keep='first')
+                    CARGA_LEADS.loc[duplicates, 'STS'] = '🟢'
                     for index, row in CARGA_LEADS.iterrows():
                         if row['Email'] in unsafe_vect['MAIL'].values or row['CLIENTE']== '1_BORRAR':
                             CARGA_LEADS.at[index, 'STS'] = '🟢'
