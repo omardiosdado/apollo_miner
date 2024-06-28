@@ -150,7 +150,7 @@ if authentication_status== True:
                                                 'Total Funding':'Total_Funding',
                                                 'Twitter Url':'Twitter_Url'})
         columns_to_keep = [
-        'First_Name', 'Last_Name', 'Title', 'Company', 'Email', 'Email Status',
+        'Lists','First_Name', 'Last_Name', 'Title', 'Company', 'Email', 'Email Status',
         'Seniority', 'First_Phone', 'Employees', 'Industry', 'Keywords',
         'Person_Linkedin_Url', 'Website', 'Company_Linkedin_Url',
         'Facebook_Url', 'Twitter_Url', 'City', 'State', 'Country',
