@@ -434,19 +434,38 @@ if authentication_status== True:
                     progress_bar.progress(nbar)
                     df5 = df4
 
+                    gc = gspread.authorize(credentials)
+                    worksheet = gc.open_by_key(spreadsheet_key4)
+                    target_sheet = worksheet.worksheet('CARGA_LEADS')
+                    CARGA_LEADS = pd.DataFrame(target_sheet.get_all_records())
+                    
+                    df6 = pd.DataFrame(columns=CARGA_LEADS.columns)
+                    
                     for index, row in df5.iterrows():
                         df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
-
-                    #  NUEVO PROCESO /////////////////////////////////////
                     df_combined = df6
-                    df_combined.insert(loc=0, column='SNIPPET_1', value=['NA'] * len(df_combined))
-                    df_combined.insert(loc=0, column='SNIPPET_2', value=['NA'] * len(df_combined))
-                    df_combined.insert(loc=0, column='SNIPPET_3', value=['NA'] * len(df_combined))
-                    df_combined.insert(loc=0, column='SNIPPET_4', value=['NA'] * len(df_combined))
-                    df_combined.insert(loc=0, column='SNIPPET_5', value=['NA'] * len(df_combined))
-                    df_combined.insert(loc=0, column='OBS', value=['NA'] * len(df_combined))
-                    df_combined.insert(loc=0, column='STS', value=['🟡'] * len(df_combined))
-                    df_combined.insert(loc=0, column='CLIENTE', value=['0_ESPERANDO..'] * len(df_combined))
+                    
+                    df_combined['SNIPPET_1']='NA'
+                    df_combined['SNIPPET_2']='NA'
+                    df_combined['SNIPPET_3']='NA'
+                    df_combined['SNIPPET_4']='NA'
+                    df_combined['SNIPPET_5']='NA'
+                    df_combined['OBS']='NA'
+                    df_combined['STS']='🟡'
+                    df_combined['CLIENTE']='0_ESPERANDO..'
+                    # for index, row in df5.iterrows():
+                    #     df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
+
+                    # #  NUEVO PROCESO /////////////////////////////////////
+                    # df_combined = df6
+                    # df_combined.insert(loc=0, column='SNIPPET_1', value=['NA'] * len(df_combined))
+                    # df_combined.insert(loc=0, column='SNIPPET_2', value=['NA'] * len(df_combined))
+                    # df_combined.insert(loc=0, column='SNIPPET_3', value=['NA'] * len(df_combined))
+                    # df_combined.insert(loc=0, column='SNIPPET_4', value=['NA'] * len(df_combined))
+                    # df_combined.insert(loc=0, column='SNIPPET_5', value=['NA'] * len(df_combined))
+                    # df_combined.insert(loc=0, column='OBS', value=['NA'] * len(df_combined))
+                    # df_combined.insert(loc=0, column='STS', value=['🟡'] * len(df_combined))
+                    # df_combined.insert(loc=0, column='CLIENTE', value=['0_ESPERANDO..'] * len(df_combined))
 
 
                     df_combined=df_combined.astype(str)
