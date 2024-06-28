@@ -469,15 +469,15 @@ if authentication_status== True:
 
 
                     df_combined=df_combined.astype(str)
-                    data_to_import = df_combined.values.tolist()
-                    data_to_add = data_to_import
-                    total_rows = len(target_sheet.get_all_values())
-                    next_row = total_rows + 1
-                    needed_rows = next_row + len(data_to_add) - 1
-                    if needed_rows > target_sheet.row_count:
-                        target_sheet.add_rows(needed_rows - target_sheet.row_count)
-                    range_to_write = f'A{next_row}:AT{next_row + len(data_to_add) - 1}'
-                    target_sheet.update(range_to_write, data_to_add)
+                    # data_to_import = df_combined.values.tolist()
+                    # data_to_add = data_to_import
+                    # total_rows = len(target_sheet.get_all_values())
+                    # next_row = total_rows + 1
+                    # needed_rows = next_row + len(data_to_add) - 1
+                    # if needed_rows > target_sheet.row_count:
+                    #     target_sheet.add_rows(needed_rows - target_sheet.row_count)
+                    # range_to_write = f'A{next_row}:AT{next_row + len(data_to_add) - 1}'
+                    # target_sheet.update(range_to_write, data_to_add)
                     #  NUEVO PROCESO /////////////////////////////////////
                     
                     progress_status.caption(f'Cargando base... {emojis[random.randint(0, len(emojis) - 1)]}')
