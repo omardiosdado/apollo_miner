@@ -182,9 +182,11 @@ if authentication_status== True:
                 spreadsheet_key1 = st.secrets['spreadsheet_key1']
                 spreadsheet_key2 = st.secrets['spreadsheet_key2']
                 spreadsheet_key3 = st.secrets['spreadsheet_key3']
+                spreadsheet_key4 = st.secrets['spreadsheet_key4']
+
 
                 gc = gspread.authorize(credentials)
-                worksheet = gc.open_by_key(spreadsheet_key3).worksheet('CHECK')  # Access the first worksheet
+                worksheet = gc.open_by_key(spreadsheet_key4).worksheet('CHECK')  # Access the first worksheet
                 # cell_value = None
                 # cell_value = (worksheet.acell('A1').value)
                 cell_value = worksheet.acell('A1').value
@@ -206,14 +208,6 @@ if authentication_status== True:
                     QUERY = ("SELECT * FROM `matrioshka-404701.matrioshka_leads.master_leads` WHERE Status = 'LDB';")
                     LEADS_DB= client2.query(QUERY).to_dataframe()
 
-                    UPLOAD2 = load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'APOLLO_OUTPUT')
-                    
-                    # progress_status.caption(f'Cargando LEADS_DB... {emojis[random.randint(0, len(emojis) - 1)]}')
-                    # nbar=5+nbar
-                    # progress_bar.progress(nbar)
-                    # LEADS_DB= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key1,'LEADS_DB')
-        
-
                     progress_status.caption(f'Cargando BLACKLIST... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
@@ -227,8 +221,31 @@ if authentication_status== True:
                     progress_status.caption(f'Cargando CLIENTS... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
-                    CLIENTS= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'ACTIVE_CLIENTS')
-        
+                    ###################
+                    ############
+                    #################
+                    #####################
+                                        ###################
+                    ############
+                    #################
+                    #####################                    ###################
+                    ############
+                    #################
+                    #####################                    ###################
+                    ############
+                    #################
+                    #####################
+                    CLIENTS= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'API')
+                            ###################
+                    ############
+                    #################
+                    #####################                    ###################
+                    ############
+                    #################
+                    #####################                    ###################
+                    ############
+                    #################
+                    #####################
                     progress_status.caption(f'Cargando LEADS_RESP... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
@@ -261,15 +278,6 @@ if authentication_status== True:
                     progress_bar.progress(nbar)
                     # QUITAMOS REPETIDOS
         
-                    # if len(UPLOAD) is not 0:
-                    #     df0 = APOLLO_RAW[~APOLLO_RAW['Email'].isin(UPLOAD['Email'])]
-                    #     FILTRO_REPETIDO_sheets=len(APOLLO_RAW)-len(df0)
-                    # else:
-                    #     df0 = APOLLO_RAW
-                    #     FILTRO_REPETIDO_sheets=len(APOLLO_RAW)-len(df0)
-                    # df = df0[~df0['Email'].isin(LEADS_DB['Email'])]
-                    # df.loc[:, 'DOMAIN_CHECK'] = df['Email'].str.split('@').str[1]
-                    # FILTRO_REPETIDO=len(APOLLO_RAW)-len(df)
                     df = APOLLO_RAW
                     df.loc[:, 'DOMAIN_CHECK'] = df['Email'].str.split('@').str[1]
                     FILTRO_REPETIDO=0
@@ -283,6 +291,10 @@ if authentication_status== True:
                     FILTRO_VACIOS=len(df)-len(df1)
                     #QUITAMOS EMAILS NO VERIFICADOS
                     df2 = df1[~df1['Email'].isin(UNSAFE['MAIL'])]
+                    personal_domains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com']  # add more domains as needed
+                    gov_domains_mex = ['gob.mx', '.gov.mx']  # add more Mexico government domains as needed
+                    gov_domains_usa = ['gov', '.gov', 'usa.gov']  # add more USA government domains as needed
+                    df2 = df2[~df2['DOMAIN_CHECK'].str.contains('|'.join(gov_domains_mex + gov_domains_usa + personal_domains), na=False)]
                     # df2 = df1[df1['Email Status'] == 'Verified']
                     # df2 = df1
                     FILTRO_EMAIL=len(df1)-len(df2)
@@ -417,29 +429,26 @@ if authentication_status== True:
                     
                     csv_data = df4.to_csv(index=False)
                    
-        
                     progress_status.caption(f'Formateando... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
-        
                     df5 = df4
-
-
-                    df4 = df4[~df4['Email'].isin(UPLOAD2['Email'])]
-                    # UPLOAD2 = UPLOAD2[~UPLOAD2['Email'].isin(LEADS_DB['Email'])]
-
-                    UPLOAD2 = UPLOAD2
-
-                    gc = gspread.authorize(credentials)
-                    worksheet = gc.open_by_key(spreadsheet_key3)
-                    target_sheet = worksheet.worksheet('APOLLO_OUTPUT')
-                    df6 = pd.DataFrame(columns=UPLOAD2.columns)
 
                     for index, row in df5.iterrows():
                         df6 = pd.concat([df6, row.to_frame().T], ignore_index=True)
 
                     #  NUEVO PROCESO /////////////////////////////////////
                     df_combined = df6
+                    df_combined.insert(loc=0, column='SNIPPET_1', value=['NA'] * len(df_combined))
+                    df_combined.insert(loc=0, column='SNIPPET_2', value=['NA'] * len(df_combined))
+                    df_combined.insert(loc=0, column='SNIPPET_3', value=['NA'] * len(df_combined))
+                    df_combined.insert(loc=0, column='SNIPPET_4', value=['NA'] * len(df_combined))
+                    df_combined.insert(loc=0, column='SNIPPET_5', value=['NA'] * len(df_combined))
+                    df_combined.insert(loc=0, column='OBS', value=['NA'] * len(df_combined))
+                    df_combined.insert(loc=0, column='STS', value=['🟡'] * len(df_combined))
+                    df_combined.insert(loc=0, column='CLIENTE', value=['0_ESPERANDO..'] * len(df_combined))
+
+
                     df_combined=df_combined.astype(str)
                     data_to_import = df_combined.values.tolist()
                     data_to_add = data_to_import
@@ -451,22 +460,6 @@ if authentication_status== True:
                     range_to_write = f'A{next_row}:AT{next_row + len(data_to_add) - 1}'
                     target_sheet.update(range_to_write, data_to_add)
                     #  NUEVO PROCESO /////////////////////////////////////
-
-                    # df_combined = pd.concat([UPLOAD2, df6], ignore_index=True)
-                    # target_sheet.clear()
-                    # df_combined=df_combined.astype(str)
-                    # data_to_import = [df_combined.columns.tolist()] + df_combined.values.tolist()
-                    # num_rowsx= len(data_to_import)
-                    # num_columnsx = len(data_to_import[0])
-                    # def get_column_label(column_index):
-                    #     label = ""
-                    #     while column_index > 0:
-                    #         column_index, remainder = divmod(column_index - 1, 26)
-                    #         label = chr(65 + remainder) + label
-                    #     return label
-                    # ending_column_label = get_column_label(num_columnsx)
-                    # range_to_updatex = f'A1:{ending_column_label}{num_rowsx}'
-                    # target_sheet.update(range_to_updatex, data_to_import)
                     
                     progress_status.caption(f'Cargando base... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
@@ -485,6 +478,84 @@ if authentication_status== True:
                     datos.dataframe(df6)
                     LIMPIOS_TOT=(str(COUNT_LEADS_CARGA-len(df6)))
                     FILTRO_REPETIDO_sheets=(str(len(df6)-len(df4)))
+
+
+
+                    gc = gspread.authorize(credentials)
+                    worksheet = gc.open_by_key(spreadsheet_key4)
+                    target_sheet = worksheet.worksheet('CARGA_LEADS')
+                    SHEET_ID = target_sheet.id  # Get the sheet ID
+                    requests = [{
+                        "clearBasicFilter": {
+                            "sheetId": SHEET_ID
+                        }
+                    }]
+
+                    worksheet.batch_update({'requests': requests})
+                    last_row = len(target_sheet.get_all_values())
+                    last_column = len(target_sheet.row_values(1))
+                    data_range = f'A2:{chr(64 + last_column)}{last_row}'
+                    target_sheet.sort((2, 'des'), range=data_range)
+                    unsafe_vect=UNSAFE[['MAIL']]
+                    CARGA_LEADS = pd.DataFrame(target_sheet.get_all_records())
+                    for index, row in CARGA_LEADS.iterrows():
+                        if row['Email'] in unsafe_vect['MAIL'].values or row['CLIENTE']== '1_BORRAR':
+                            CARGA_LEADS.at[index, 'STS'] = '🟢'
+                            CARGA_LEADS.at[index, 'OBS'] = 'UNSAFE'
+                    update_data = CARGA_LEADS[['STS', 'OBS']].values.tolist()
+                    range_start = 2  # Assuming you want to start updating from the second row
+                    range_end = range_start + len(update_data) - 1
+                    # Update the entire range in one go
+                    target_sheet.update(f'B{range_start}:C{range_end}', update_data)
+                    last_green_index = CARGA_LEADS[CARGA_LEADS['STS'] == '🟢'].last_valid_index()
+                    if last_green_index is not None:
+                        if last_green_index >= 1:
+                            target_sheet.delete_rows(2, int(last_green_index) + 2)
+                        else:
+                            target_sheet.delete_rows(2)
+                    last_row = len(target_sheet.get_all_values())
+                    last_column = len(target_sheet.row_values(1))
+                    data_range = f'A2:{chr(64 + last_column)}{last_row}'
+                    target_sheet.sort((1, 'des'), range=data_range)
+                    QUERY = ("SELECT KEY2 FROM `matrioshka-404701.matrioshka_leads.master_camp_leads`")
+                    email_vect= client2.query(QUERY).to_dataframe()
+                    email_vect= email_vect.drop_duplicates()
+                    # email_vect = pd.concat([blacklist4, email_vect])
+                    email_vect = email_vect.reset_index(drop=True)
+                    CARGA_LEADS = pd.DataFrame(target_sheet.get_all_records())
+                    CARGA_LEADS.insert(loc=0, column='KEY', value=['NA'] * len(CARGA_LEADS))
+                    for index, row in CARGA_LEADS.iterrows():
+                        if row['STS'] == '🔴' and row['OBS'] == 'REPETIDO' and row['KEY'] not in email_vect['KEY2'].values:
+                            CARGA_LEADS.at[index, 'STS'] = '🟡'
+                            CARGA_LEADS.at[index, 'OBS'] = 'CAMBIADO'
+                        if '0_ESPERANDO..' == row['CLIENTE']:
+                            continue
+                        else:
+                            CARGA_LEADS.at[index, 'KEY'] = row['CLIENTE'].split("_")[0] + '_' + row['Email']
+
+                    for index, row in CARGA_LEADS.iterrows():
+                        if '0_ESPERANDO..' == row['CLIENTE']:
+                            continue
+                        if row['KEY'] in email_vect['KEY2'].values:
+                            CARGA_LEADS.at[index, 'STS'] = '🔴'
+                            CARGA_LEADS.at[index, 'OBS'] = 'REPETIDO'
+                    CARGA_LEADS.drop(columns=['KEY'], inplace=True)
+                    update_data = CARGA_LEADS[['STS', 'OBS']].values.tolist()
+                    range_start = 2  # Assuming you want to start updating from the second row
+                    range_end = range_start + len(update_data) - 1
+                    # Update the entire range in one go
+                    target_sheet.update(f'B{range_start}:C{range_end}', update_data)
+                    data_to_import = df_combined.values.tolist()
+                    data_to_add = data_to_import
+                    total_rows = len(target_sheet.get_all_values())
+                    next_row = total_rows + 1
+                    needed_rows = next_row + len(data_to_add) - 1
+                    if needed_rows > target_sheet.row_count:
+                        target_sheet.add_rows(needed_rows - target_sheet.row_count)
+                    range_to_write = f'A{next_row}:BB{next_row + len(data_to_add) - 1}'
+                    target_sheet.update(range_to_write, data_to_add)
+
+
                     st.session_state.click = False
                     progress_bar.progress(100)
                     progress_status.caption('Archivo cargado a sheets :plunger:')   
@@ -501,7 +572,7 @@ if authentication_status== True:
                     Procesados: {(str(len(df6)))}
                     '''
                     st.code(code, line_numbers=False)
-                    worksheet = gc.open_by_key(spreadsheet_key3).worksheet('CHECK')  # Access the first worksheet
+                    worksheet = gc.open_by_key(spreadsheet_key4).worksheet('CHECK')  # Access the first worksheet
                     worksheet.update(range_name='A1', values=[[""]])  # using named arguments
                 # if cell_value:
                 else:
