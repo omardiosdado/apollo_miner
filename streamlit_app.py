@@ -529,11 +529,11 @@ if authentication_status== True:
                     # Update the entire range in one go
                     target_sheet.update(f'B{range_start}:C{range_end}', update_data)
                     last_green_index = CARGA_LEADS[CARGA_LEADS['STS'] == '🟢'].last_valid_index()
-                    if last_green_index is not None:
-                        if last_green_index >= 1:
-                            target_sheet.delete_rows(2, int(last_green_index) + 2)
-                        else:
-                            target_sheet.delete_rows(2)
+                    # if last_green_index is not None:
+                    #     if last_green_index >= 1:
+                    #         target_sheet.delete_rows(2, int(last_green_index) + 2)
+                    #     else:
+                    #         target_sheet.delete_rows(2)
                     last_row = len(target_sheet.get_all_values())
                     last_column = len(target_sheet.row_values(1))
                     data_range = f'A2:{chr(64 + last_column)}{last_row}'
