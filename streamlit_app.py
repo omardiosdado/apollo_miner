@@ -529,7 +529,10 @@ if authentication_status== True:
                     # Update the entire range in one go
                     target_sheet.update(f'B{range_start}:C{range_end}', update_data)
                     #mod abajo
-                    target_sheet.sort((2, 'des'), range=data_range)
+                    last_row = len(target_sheet.get_all_values())
+                    last_column = len(target_sheet.row_values(1))
+                    data_range = f'A2:{chr(64 + last_column)}{last_row}'
+                    target_sheet.sort((2, 'des'), range=data_range)                    
                     ## mod arriba
                     last_green_index = CARGA_LEADS[CARGA_LEADS['STS'] == '🟢'].last_valid_index()
                     #mod abajo
