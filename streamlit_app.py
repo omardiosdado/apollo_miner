@@ -528,7 +528,13 @@ if authentication_status== True:
                     range_end = range_start + len(update_data) - 1
                     # Update the entire range in one go
                     target_sheet.update(f'B{range_start}:C{range_end}', update_data)
+                    #mod abajo
+                    target_sheet.sort((2, 'des'), range=data_range)
+                    ## mod arriba
                     last_green_index = CARGA_LEADS[CARGA_LEADS['STS'] == '🟢'].last_valid_index()
+                    #mod abajo
+                    CARGA_LEADS = pd.DataFrame(target_sheet.get_all_records())
+                    #mod arriba
                     # if last_green_index is not None:
                     #     if last_green_index >= 1:
                     #         target_sheet.delete_rows(2, int(last_green_index) + 2)
