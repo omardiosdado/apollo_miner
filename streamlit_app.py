@@ -582,11 +582,11 @@ if authentication_status== True:
                     target_sheet.sort((2, 'des'), range=data_range)                    
                     CARGA_LEADS = pd.DataFrame(target_sheet.get_all_records())
                     last_green_index = CARGA_LEADS[CARGA_LEADS['STS'] == '🟢'].last_valid_index()
-                    # if last_green_index is not None:
-                    #     if last_green_index >= 1:
-                    #         target_sheet.delete_rows(2, int(last_green_index) + 2)
-                    #     else:
-                    #         target_sheet.delete_rows(2)
+                    if last_green_index is not None:
+                        if last_green_index >= 1:
+                            target_sheet.delete_rows(2, int(last_green_index) + 2)
+                        else:
+                            target_sheet.delete_rows(2)
 ## mod arriba
                     st.session_state.click = False
                     progress_bar.progress(100)
