@@ -528,16 +528,7 @@ if authentication_status== True:
                     range_end = range_start + len(update_data) - 1
                     # Update the entire range in one go
                     target_sheet.update(f'B{range_start}:C{range_end}', update_data)
-                    #mod abajo
-                    last_row = len(target_sheet.get_all_values())
-                    last_column = len(target_sheet.row_values(1))
-                    data_range = f'A2:{chr(64 + last_column)}{last_row}'
-                    target_sheet.sort((2, 'des'), range=data_range)                    
-                    ## mod arriba
-                    last_green_index = CARGA_LEADS[CARGA_LEADS['STS'] == '🟢'].last_valid_index()
-                    #mod abajo
-                    CARGA_LEADS = pd.DataFrame(target_sheet.get_all_records())
-                    #mod arriba
+                    # last_green_index = CARGA_LEADS[CARGA_LEADS['STS'] == '🟢'].last_valid_index()
                     # if last_green_index is not None:
                     #     if last_green_index >= 1:
                     #         target_sheet.delete_rows(2, int(last_green_index) + 2)
@@ -584,8 +575,19 @@ if authentication_status== True:
                         target_sheet.add_rows(needed_rows - target_sheet.row_count)
                     range_to_write = f'A{next_row}:BB{next_row + len(data_to_add) - 1}'
                     target_sheet.update(range_to_write, data_to_add)
-
-
+#mod abajo
+                    last_row = len(target_sheet.get_all_values())
+                    last_column = len(target_sheet.row_values(1))
+                    data_range = f'A2:{chr(64 + last_column)}{last_row}'
+                    target_sheet.sort((2, 'des'), range=data_range)                    
+                    CARGA_LEADS = pd.DataFrame(target_sheet.get_all_records())
+                    last_green_index = CARGA_LEADS[CARGA_LEADS['STS'] == '🟢'].last_valid_index()
+                    # if last_green_index is not None:
+                    #     if last_green_index >= 1:
+                    #         target_sheet.delete_rows(2, int(last_green_index) + 2)
+                    #     else:
+                    #         target_sheet.delete_rows(2)
+## mod arriba
                     st.session_state.click = False
                     progress_bar.progress(100)
                     progress_status.caption('Archivo cargado a sheets :plunger:')   
