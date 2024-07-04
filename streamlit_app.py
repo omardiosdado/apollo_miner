@@ -121,7 +121,7 @@ if authentication_status== True:
     emojis = emoji['Shortcodes']
     
     if APOLLO_CSV is not None:
-    
+    #TEST
         APOLLO_RAW = pd.read_csv(APOLLO_CSV, encoding='utf-8')
         APOLLO_RAW = APOLLO_RAW.drop(columns=[ 'Email Confidence', 'Contact Owner', 'Stage', 
                         'Last Contacted', 'Account Owner', 'Email Sent', 
@@ -184,7 +184,6 @@ if authentication_status== True:
                 spreadsheet_key3 = st.secrets['spreadsheet_key3']
                 spreadsheet_key4 = st.secrets['spreadsheet_key4']
 
-
                 gc = gspread.authorize(credentials)
                 worksheet = gc.open_by_key(spreadsheet_key4).worksheet('CHECK')  # Access the first worksheet
                 # cell_value = None
@@ -199,10 +198,9 @@ if authentication_status== True:
                     progress_status.caption(f'Cargando base actual... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
-
-                    QUERY = ("SELECT * FROM `matrioshka-404701.matrioshka_leads.master_leads` WHERE Status = 'AP';")
-                    UPLOAD = client2.query(QUERY).to_dataframe()
-                    progress_status.caption(f'Cargando LEADS_DB... {emojis[random.randint(0, len(emojis) - 1)]}')
+                    # QUERY = ("SELECT * FROM `matrioshka-404701.matrioshka_leads.master_leads` WHERE Status = 'AP';")
+                    # UPLOAD = client2.query(QUERY).to_dataframe()
+                    # progress_status.caption(f'Cargando LEADS_DB... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
                     QUERY = ("SELECT * FROM `matrioshka-404701.matrioshka_leads.master_leads` WHERE Status = 'LDB';")
@@ -222,30 +220,10 @@ if authentication_status== True:
                     nbar=5+nbar
                     progress_bar.progress(nbar)
                     ###################
-                    ############
-                    #################
-                    #####################
-                                        ###################
-                    ############
-                    #################
-                    #####################                    ###################
-                    ############
-                    #################
-                    #####################                    ###################
-                    ############
-                    #################
-                    #####################
+
                     CLIENTS= load_data('https://docs.google.com/spreadsheets/d/'+spreadsheet_key3,'API')
                             ###################
-                    ############
-                    #################
-                    #####################                    ###################
-                    ############
-                    #################
-                    #####################                    ###################
-                    ############
-                    #################
-                    #####################
+
                     progress_status.caption(f'Cargando LEADS_RESP... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
@@ -270,9 +248,7 @@ if authentication_status== True:
                     MAIL_STATUS['more_than_4_months'] = MAIL_STATUS['verified_on'] < four_months_ago
                     MAIL_STATUS['verified_on'] = MAIL_STATUS['verified_on'].dt.strftime('%Y-%m-%d')
                     UNSAFE = MAIL_STATUS[MAIL_STATUS['safe_to_send'] == 'no']
-                    
-
-        
+                           
                     progress_status.caption(f'Filtrando datos... {emojis[random.randint(0, len(emojis) - 1)]}')
                     nbar=5+nbar
                     progress_bar.progress(nbar)
@@ -282,9 +258,7 @@ if authentication_status== True:
                     df.loc[:, 'DOMAIN_CHECK'] = df['Email'].str.split('@').str[1]
                     FILTRO_REPETIDO=0
                     # FILTRO_REPETIDO_sheets=0
-                    
-
-                    
+                                        
                     #QUITAMOS VACIOS
                     df1 = df.dropna(subset=['First_Name', 'Company', 'Email','Person_Linkedin_Url','Website'], how='any')
                     df1 = df1.reset_index(drop=True)
@@ -351,10 +325,7 @@ if authentication_status== True:
                                 # Handle the case when EMPLOYEES is empty
                                 EMP_MIN = None  # or some default value
                                 EMP_MAX = None  # or some default value
-    
-                            
-                            # EMP_MIN=(min(EMPLOYEES.dropna()['EMPLOYEES']))
-                            # EMP_MAX=(max(EMPLOYEES.dropna()['EMPLOYEES']))    
+      
                             df3['SCORE_EMP_'+row[0]] = (df3['Employees'] >= EMP_MIN) & (df3['Employees'] <= EMP_MAX)
                             # Score Title
                             TITLE=LEADS_DB[LEADS_DB['Email'].isin(df_client['EMAIL'])][['Title']].drop_duplicates().reset_index(drop=True)
@@ -509,12 +480,14 @@ if authentication_status== True:
                             "sheetId": SHEET_ID
                         }
                     }]
-
                     worksheet.batch_update({'requests': requests})
+
+
                     last_row = len(target_sheet.get_all_values())
                     last_column = len(target_sheet.row_values(1))
                     data_range = f'A2:{chr(64 + last_column)}{last_row}'
                     target_sheet.sort((2, 'des'), range=data_range)
+
                     unsafe_vect=UNSAFE[['MAIL']]
                     CARGA_LEADS = pd.DataFrame(target_sheet.get_all_records())
                     duplicates = CARGA_LEADS.duplicated(keep='first')
@@ -534,10 +507,12 @@ if authentication_status== True:
                     #         target_sheet.delete_rows(2, int(last_green_index) + 2)
                     #     else:
                     #         target_sheet.delete_rows(2)
+
                     last_row = len(target_sheet.get_all_values())
                     last_column = len(target_sheet.row_values(1))
                     data_range = f'A2:{chr(64 + last_column)}{last_row}'
                     target_sheet.sort((1, 'des'), range=data_range)
+
                     QUERY = ("SELECT KEY2 FROM `matrioshka-404701.matrioshka_leads.master_camp_leads`")
                     email_vect= client2.query(QUERY).to_dataframe()
                     email_vect= email_vect.drop_duplicates()
@@ -564,6 +539,7 @@ if authentication_status== True:
                     update_data = CARGA_LEADS[['STS', 'OBS']].values.tolist()
                     range_start = 2  # Assuming you want to start updating from the second row
                     range_end = range_start + len(update_data) - 1
+                    
                     # Update the entire range in one go
                     target_sheet.update(f'B{range_start}:C{range_end}', update_data)
                     data_to_import = df_combined.values.tolist()
@@ -576,12 +552,15 @@ if authentication_status== True:
                     range_to_write = f'A{next_row}:BB{next_row + len(data_to_add) - 1}'
                     target_sheet.update(range_to_write, data_to_add)
 #mod abajo
-                    last_row = len(target_sheet.get_all_values())
-                    last_column = len(target_sheet.row_values(1))
-                    data_range = f'A2:{chr(64 + last_column)}{last_row}'
-                    target_sheet.sort((2, 'des'), range=data_range)                    
-                    CARGA_LEADS = pd.DataFrame(target_sheet.get_all_records())
-                    last_green_index = CARGA_LEADS[CARGA_LEADS['STS'] == '🟢'].last_valid_index()
+                    # last_row = len(target_sheet.get_all_values())
+                    # last_column = len(target_sheet.row_values(1))
+                    # data_range = f'A2:{chr(64 + last_column)}{last_row}'
+                    # target_sheet.sort((2, 'des'), range=data_range)                    
+                    # CARGA_LEADS = pd.DataFrame(target_sheet.get_all_records())
+
+
+
+                    # last_green_index = CARGA_LEADS[CARGA_LEADS['STS'] == '🟢'].last_valid_index()
 #                     if last_green_index is not None:
 #                         if last_green_index >= 1:
 #                             target_sheet.delete_rows(2, int(last_green_index) + 2)
